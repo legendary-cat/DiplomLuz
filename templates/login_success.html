@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Успешный вход</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .success-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        .user-info {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+        .actions {
+            margin-top: 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <h1>Вход выполнен успешно!</h1>
+
+        <div class="user-info">
+            <p>Добро пожаловать, {{ user.client_name }} {{ user.client_last_name }}!</p>
+            <p>Email: {{ user.client_email }}</p>
+        </div>
+
+        <div class="actions">
+            <a href="/" class="btn">На главную</a>
+            <a href="/profile" class="btn">Мой профиль</a>
+        </div>
+    </div>
+</body>
+</html>

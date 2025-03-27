@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заказ успешно оформлен</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        .success-message {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .success-icon {
+            font-size: 60px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        .order-info {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .info-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .info-label {
+            font-weight: bold;
+            width: 200px;
+        }
+        .info-value {
+            flex: 1;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="success-message">
+        <div class="success-icon">✓</div>
+        <h1>Поздравляем с успешным оформлением заказа!</h1>
+        <p>Ваш заказ №{{ order.id_order }} успешно создан.</p>
+    </div>
+
+    <div class="order-info">
+        <h2>Информация о заказе</h2>
+
+        <div class="info-row">
+            <div class="info-label">ФИО:</div>
+            <div class="info-value">{{ client_info.full_name }}</div>
+        </div>
+
+        <div class="info-row">
+            <div class="info-label">Электронная почта:</div>
+            <div class="info-value">{{ client_info.email }}</div>
+        </div>
+
+        <div class="info-row">
+            <div class="info-label">Объект:</div>
+            <div class="info-value">{{ client_info.object_name }}</div>
+        </div>
+
+        <div class="info-row">
+            <div class="info-label">Адрес объекта:</div>
+            <div class="info-value">{{ client_info.object_address }}</div>
+        </div>
+
+        <div class="info-row">
+            <div class="info-label">Сумма заказа:</div>
+            <div class="info-value">{{ client_info.order_price }}</div>
+        </div>
+
+        <div class="info-row">
+            <div class="info-label">Дата оформления:</div>
+            <div class="info-value">{{ client_info.order_date }}</div>
+        </div>
+
+        <div class="info-row">
+            <div class="info-label">Статус заказа:</div>
+            <div class="info-value">{{ client_info.order_status }}</div>
+        </div>
+    </div>
+
+    <div class="buttons">
+        <a href="/" class="btn btn-secondary">Перейти на главную</a>
+        <a href="/profile" class="btn btn-primary">Перейти в личный кабинет</a>
+    </div>
+</body>
+</html>

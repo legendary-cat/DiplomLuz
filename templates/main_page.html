@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дорожные Технологии - Строительство и ремонт дорог</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --gradient-blue: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+            --gradient-red: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            --gradient-dark: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            overflow-x: hidden;
+        }
+
+        /* Глобальные анимации */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 0.6; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% {
+                transform: translateY(-100px) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            padding: 1rem 2rem;
+            background-color: rgba(44, 62, 80, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo img {
+            height: 50px;
+            margin-right: 15px;
+            transition: all 0.3s;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+            position: relative;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem 0;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-color);
+            transition: width 0.3s;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .auth-btn {
+            background: var(--gradient-blue);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Улучшенный hero-блок с анимациями */
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.85), rgba(44, 62, 80, 0.9)),
+                        url('/static/road-construction.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            min-height: 700px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(52, 152, 219, 0.3) 0%, transparent 50%);
+            z-index: 0;
+            animation: pulse 15s infinite alternate;
+        }
+
+        .hero-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .hero-particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            animation: floatParticle linear infinite;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.3s forwards;
+        }
+
+        .hero h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(to right, #fff, #ecf0f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 2.5rem;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.6s forwards;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--gradient-red);
+            color: white;
+            padding: 1.1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+            position: relative;
+            overflow: hidden;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.9s forwards;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(231, 76, 60, 0.5);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: translateX(-100%);
+            transition: 0.6s;
+        }
+
+        .btn:hover::after {
+            transform: translateX(100%);
+        }
+
+        /* Переработанный блок калькулятора */
+        .calculator-cta {
+            background: var(--gradient-dark),
+                        url('https://images.unsplash.com/photo-1581093196277-1c8d47a119b0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            color: white;
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calculator-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 80% 50%, rgba(52, 152, 219, 0.4) 0%, transparent 50%);
+            z-index: 0;
+            animation: pulse 8s infinite alternate-reverse;
+        }
+
+        .calculator-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .calculator-particle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            animation: floatParticle linear infinite;
+        }
+
+        .calculator-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .calculator-cta h2 {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+            transform: translateY(30px);
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.4s forwards;
+        }
+
+        .calculator-cta p {
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            transform: translateY(30px);
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.6s forwards;
+        }
+
+        .calculator-btn {
+            display: inline-block;
+            background: var(--gradient-blue);
+            color: white;
+            padding: 1.1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+            position: relative;
+            overflow: hidden;
+            transform: translateY(30px);
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.8s forwards;
+        }
+
+        .calculator-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(52, 152, 219, 0.5);
+        }
+
+        .calculator-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: translateX(-100%);
+            transition: 0.6s;
+        }
+
+        .calculator-btn:hover::after {
+            transform: translateX(100%);
+        }
+
+        .services {
+            padding: 6rem 2rem;
+            background-color: white;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+            font-size: 2.8rem;
+            color: var(--dark-color);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-red);
+            border-radius: 2px;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: all 0.8s;
+        }
+
+        .card:hover .card-image {
+            transform: scale(1.1) rotate(2deg);
+        }
+
+        .card-content {
+            padding: 1.8rem;
+            text-align: center;
+        }
+
+        .card-content h3 {
+            margin-bottom: 1.2rem;
+            color: var(--primary-color);
+            font-size: 1.4rem;
+        }
+
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 5rem 2rem 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            text-align: left;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1.8rem;
+            font-size: 1.4rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--gradient-red);
+            border-radius: 3px;
+        }
+
+        .footer-section p, .footer-section a {
+            color: #bdc3c7;
+            margin-bottom: 1rem;
+            display: block;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+            padding-left: 8px;
+        }
+
+        .copyright {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #bdc3c7;
+        }
+
+        @media (max-width: 1200px) {
+            .hero h2 {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hero {
+                height: 90vh;
+                min-height: 600px;
+            }
+
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+
+            .calculator-cta {
+                padding: 6rem 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .calculator-cta h2 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            nav ul {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav ul li {
+                margin: 0.5rem;
+            }
+
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .btn, .calculator-btn {
+                padding: 0.9rem 1.8rem;
+                font-size: 0.9rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Анимированные частицы для hero -->
+    <div class="hero-particles" id="heroParticles"></div>
+
+    <header id="header">
+        <div class="logo">
+            <img src="/static/logo.jpg" alt="Дорожные Технологии Лого">
+            <h1>Дорожные Технологии</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#calculator">Калькулятор</a></li>
+                <li><a href="#services">Услуги</a></li>
+                <li><a href="#equipment">Оборудование</a></li>
+                <li><a href="#materials">Материалы</a></li>
+                <li><a href="#about">О компании</a></li>
+                <li><a href="/profile" class="auth-btn">Личный кабинет</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Профессиональное строительство и ремонт дорог</h2>
+            <p>20 лет опыта в создании качественных дорожных покрытий по всей России. Используем современные технологии и материалы.</p>
+            <a href="#calculator" class="btn">Рассчитать стоимость</a>
+        </div>
+    </section>
+
+    <section class="calculator-cta" id="calculator">
+        <div class="calculator-particles" id="calculatorParticles"></div>
+        <div class="calculator-content">
+            <h2>Онлайн калькулятор стоимости</h2>
+            <p>Рассчитайте предварительную стоимость вашего проекта прямо сейчас</p>
+            <a href="/calc_front" class="calculator-btn">Перейти к калькулятору</a>
+        </div>
+    </section>
+
+    <section class="services" id="services">
+        <h2 class="section-title">Наши услуги</h2>
+        <div class="cards-container">
+            <a href="/service-details?category=services&id=9" class="card">
+                <img src="/static/services/curb.jpg" alt="Установка дорожного бордюра" class="card-image">
+                <div class="card-content">
+                    <h3>Установка дорожного бордюра</h3>
+                    <p>Профессиональный монтаж дорожных бордюров любой сложности</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=services&id=10" class="card">
+                <img src="/static/services/pavement-curb.jpg" alt="Установка тротуарного бордюра" class="card-image">
+                <div class="card-content">
+                    <h3>Установка тротуарного бордюра</h3>
+                    <p>Качественная установка бордюров для тротуаров и пешеходных зон</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=services&id=11" class="card">
+                <img src="/static/services/paving-stones.jpg" alt="Укладка тротуарной плитки" class="card-image">
+                <div class="card-content">
+                    <h3>Укладка тротуарной плитки</h3>
+                    <p>Эстетичная и долговечная укладка тротуарной плитки</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=services&id=12" class="card">
+                <img src="/static/services/marking.jpg" alt="Нанесение разметки краской" class="card-image">
+                <div class="card-content">
+                    <h3>Нанесение разметки краской</h3>
+                    <p>Четкая и долговечная дорожная разметка</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=services&id=14" class="card">
+                <img src="/static/services/debris.jpg" alt="Вывоз строительного мусора" class="card-image">
+                <div class="card-content">
+                    <h3>Вывоз строительного мусора</h3>
+                    <p>Оперативный вывоз и утилизация строительных отходов</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=services&id=7" class="card">
+                <img src="/static/services/private-asphalt.jpg" alt="Асфальтирование частных территорий" class="card-image">
+                <div class="card-content">
+                    <h3>Асфальтирование частных территорий</h3>
+                    <p>Благоустройство дворов, парковок и придомовых территорий</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=services&id=5" class="card">
+                <img src="/static/services/double-layer.jpg" alt="Двухслойное асфальтирование" class="card-image">
+                <div class="card-content">
+                    <h3>Двухслойное асфальтирование</h3>
+                    <p>Прочное покрытие с увеличенным сроком службы</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=services&id=13" class="card">
+                <img src="/static/services/signs.jpg" alt="Установка дорожных знаков" class="card-image">
+                <div class="card-content">
+                    <h3>Установка дорожных знаков</h3>
+                    <p>Монтаж знаков согласно ГОСТ и требованиям безопасности</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=services&id=16" class="card">
+                <img src="/static/services/milling.jpg" alt="Фрезерование асфальтобетонного покрытия" class="card-image">
+                <div class="card-content">
+                    <h3>Фрезерование асфальтобетонного покрытия толщ. 5 см.</h3>
+                    <p>Точное удаление старого покрытия перед ремонтом</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=services&id=6" class="card">
+                <img src="/static/services/pothole.jpg" alt="Ямочный ремонт" class="card-image">
+                <div class="card-content">
+                    <h3>Ямочный ремонт</h3>
+                    <p>Быстрое устранение выбоин и повреждений дорожного полотна</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=services&id=4" class="card">
+                <img src="/static/services/asphalt.jpg" alt="Укладка асфальта" class="card-image">
+                <div class="card-content">
+                    <h3>Укладка асфальта</h3>
+                    <p>Качественное асфальтирование дорог и площадок</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=services&id=15" class="card">
+                <img src="/static/services/manual-removal.jpg" alt="Разработка асфальтобетонного покрытия" class="card-image">
+                <div class="card-content">
+                    <h3>Ручная разработка асфальтобетонного покрытия толщ. 5 см.</h3>
+                    <p>Аккуратное удаление покрытия в труднодоступных местах</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section class="services" id="equipment">
+        <h2 class="section-title">Наше оборудование</h2>
+        <div class="cards-container">
+            <a href="/service-details?category=equipment&id=10" class="card">
+                <img src="/static/equipment/mallet.jpg" alt="Резиновая киянка" class="card-image">
+                <div class="card-content">
+                    <h3>Резиновая киянка</h3>
+                    <p>Для точной установки бордюров и плитки</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=equipment&id=11" class="card">
+                <img src="/static/equipment/marking-machine.jpg" alt="Разметочная машина" class="card-image">
+                <div class="card-content">
+                    <h3>Разметочная машина</h3>
+                    <p>Для нанесения точной дорожной разметки</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=equipment&id=12" class="card">
+                <img src="/static/equipment/aerial-platform.jpg" alt="Автовышка" class="card-image">
+                <div class="card-content">
+                    <h3>Автовышка</h3>
+                    <p>Для монтажа знаков и работы на высоте</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=equipment&id=13" class="card">
+                <img src="/static/equipment/mixing-plant.jpg" alt="Горячая смесительная установка" class="card-image">
+                <div class="card-content">
+                    <h3>Горячая смесительная установка</h3>
+                    <p>Производство качественных асфальтобетонных смесей</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=equipment&id=3" class="card">
+                <img src="/static/equipment/roller.jpg" alt="Каток" class="card-image">
+                <div class="card-content">
+                    <h3>Каток</h3>
+                    <p>Для уплотнения асфальта и других дорожных материалов</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=equipment&id=2" class="card">
+                <img src="/static/equipment/truck.jpg" alt="Грузовик" class="card-image">
+                <div class="card-content">
+                    <h3>Грузовик</h3>
+                    <p>Для транспортировки материалов и оборудования</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=equipment&id=1" class="card">
+                <img src="/static/equipment/paver.jpg" alt="Асфальтоукладчик" class="card-image">
+                <div class="card-content">
+                    <h3>Асфальтоукладчик</h3>
+                    <p>Для равномерной укладки асфальтобетонной смеси</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=equipment&id=4" class="card">
+                <img src="/static/equipment/milling-machine.jpg" alt="Дорожная фреза" class="card-image">
+                <div class="card-content">
+                    <h3>Дорожная фреза</h3>
+                    <p>Для фрезерования старого асфальтового покрытия</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=equipment&id=5" class="card">
+                <img src="/static/equipment/coher.jpg" alt="Кохер для асфальта" class="card-image">
+                <div class="card-content">
+                    <h3>Кохер для асфальта</h3>
+                    <p>Для поддержания температуры асфальтобетонной смеси</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=equipment&id=6" class="card">
+                <img src="/static/equipment/excavator-loader.jpg" alt="Экскаватор-погрузчик" class="card-image">
+                <div class="card-content">
+                    <h3>Экскаватор-погрузчик</h3>
+                    <p>Для земляных работ и перемещения материалов</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=equipment&id=7" class="card">
+                <img src="/static/equipment/tractor-excavator.jpg" alt="Трактор-экскаватор" class="card-image">
+                <div class="card-content">
+                    <h3>Трактор-экскаватор</h3>
+                    <p>Для масштабных земляных работ</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=equipment&id=8" class="card">
+                <img src="/static/equipment/concrete-mixer.jpg" alt="Бетономешалка" class="card-image">
+                <div class="card-content">
+                    <h3>Бетономешалка</h3>
+                    <p>Для приготовления бетонных смесей</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=equipment&id=9" class="card">
+                <img src="/static/equipment/vibratory-plate.jpg" alt="Виброплита" class="card-image">
+                <div class="card-content">
+                    <h3>Виброплита</h3>
+                    <p>Для уплотнения грунта и сыпучих материалов</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section class="services" id="materials">
+        <h2 class="section-title">Наши материалы</h2>
+        <div class="cards-container">
+            <a href="/service-details?category=materials&id=1" class="card">
+                <img src="/static/materials/sand.jpg" alt="Песок" class="card-image">
+                <div class="card-content">
+                    <h3>Песок</h3>
+                    <p>Высококачественный строительный песок</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=materials&id=2" class="card">
+                <img src="/static/materials/crushed-stone.jpg" alt="Щебень" class="card-image">
+                <div class="card-content">
+                    <h3>Щебень</h3>
+                    <p>Различные фракции для всех видов работ</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=materials&id=3" class="card">
+                <img src="/static/materials/gravel.jpg" alt="Гравий" class="card-image">
+                <div class="card-content">
+                    <h3>Гравий</h3>
+                    <p>Натуральный материал для дорожных работ</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=materials&id=4" class="card">
+                <img src="/static/materials/road-curb.jpg" alt="Дорожный бардюр" class="card-image">
+                <div class="card-content">
+                    <h3>Дорожный бардюр Фабрика «Готика»</h3>
+                    <p>Прочные и долговечные дорожные бордюры</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=materials&id=5" class="card">
+                <img src="/static/materials/pavement-curb.jpg" alt="Тротуарный бордюр" class="card-image">
+                <div class="card-content">
+                    <h3>Тротуарный бордюр Фабрика «Готика»</h3>
+                    <p>Эстетичные бордюры для пешеходных зон</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=materials&id=6" class="card">
+                <img src="/static/materials/paving-stones.jpg" alt="Тротуарная плитка" class="card-image">
+                <div class="card-content">
+                    <h3>Тротуарная плитка Фабрика «Готика»</h3>
+                    <p>Широкий выбор форм и цветов</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=materials&id=8" class="card">
+                <img src="/static/materials/hot-asphalt.jpg" alt="Асфальтобетонная смесь" class="card-image">
+                <div class="card-content">
+                    <h3>Смесь асфальтобетонная горячая крупнозернистая</h3>
+                    <p>Для устройства нижнего слоя покрытия</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=materials&id=9" class="card">
+                <img src="/static/materials/geotextile.jpg" alt="Геотекстиль" class="card-image">
+                <div class="card-content">
+                    <h3>Геотекстиль</h3>
+                    <p>Для разделения слоев и укрепления основания</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=materials&id=10" class="card">
+                <img src="/static/materials/bitumen-emulsion.jpg" alt="Битумная эмульсия" class="card-image">
+                <div class="card-content">
+                    <h3>Битумная эмульсия</h3>
+                    <p>Для обработки поверхности и склеивания слоев</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=materials&id=11" class="card">
+                <img src="/static/materials/reinforcement.jpg" alt="Арматура" class="card-image">
+                <div class="card-content">
+                    <h3>Арматура</h3>
+                    <p>Для усиления бетонных конструкций</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=materials&id=12" class="card">
+                <img src="/static/materials/anchor-bolts.jpg" alt="Анкерные болты" class="card-image">
+                <div class="card-content">
+                    <h3>Анкерные болты</h3>
+                    <p>Для крепления дорожных ограждений и знаков</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=materials&id=13" class="card">
+                <img src="/static/materials/roofing-felt.jpg" alt="Рубероид" class="card-image">
+                <div class="card-content">
+                    <h3>Рубероид</h3>
+                    <p>Для гидроизоляции строительных конструкций</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=materials&id=14" class="card">
+                <img src="/static/materials/cement.jpg" alt="Цемент" class="card-image">
+                <div class="card-content">
+                    <h3>Цемент</h3>
+                    <p>Высококачественный цемент для строительных работ</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=materials&id=15" class="card">
+                <img src="/static/materials/paint.jpg" alt="Краска" class="card-image">
+                <div class="card-content">
+                    <h3>Краска</h3>
+                    <p>Для дорожной разметки и защитных покрытий</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=materials&id=16" class="card">
+                <img src="/static/materials/concrete.jpg" alt="Бетон" class="card-image">
+                <div class="card-content">
+                    <h3>Бетон</h3>
+                    <p>Готовые бетонные смеси для различных работ</p>
+                </div>
+            </a>
+
+            <a href="/service-details?category=materials&id=7" class="card">
+                <img src="/static/materials/asphalt-mixture.jpg" alt="Асфальтовая смесь" class="card-image">
+                <div class="card-content">
+                    <h3>Асфальтовая смесь</h3>
+                    <p>Различные типы смесей для всех видов покрытий</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <footer id="about">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>О компании</h3>
+                <p>Дорожные Технологии - лидер в области строительства и ремонта дорог с 2003 года.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <p>г. Москва, ул. Дорожная, 123</p>
+                <p>+7 (495) 123-45-67</p>
+                <p>info@dor-teh.ru</p>
+            </div>
+            <div class="footer-section">
+                <h3>Быстрые ссылки</h3>
+                <a href="#calculator">Калькулятор</a>
+                <a href="#services">Услуги</a>
+                <a href="#equipment">Оборудование</a>
+                <a href="#materials">Материалы</a>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 Дорожные Технологии. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Создание анимированных частиц для hero
+        function createHeroParticles() {
+            const container = document.getElementById('heroParticles');
+            const particleCount = 30;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('hero-particle');
+
+                // Случайные параметры
+                const size = Math.random() * 10 + 5;
+                const posX = Math.random() * 100;
+                const delay = Math.random() * 15;
+                const duration = Math.random() * 25 + 15;
+
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.bottom = `-${size}px`;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+
+                // Случайная прозрачность
+                particle.style.opacity = Math.random() * 0.5 + 0.2;
+
+                container.appendChild(particle);
+            }
+        }
+
+        // Создание анимированных частиц для калькулятора
+        function createCalculatorParticles() {
+            const container = document.getElementById('calculatorParticles');
+            const particleCount = 500;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('calculator-particle');
+
+                // Случайные параметры
+                const size = Math.random() * 15 + 5;
+                const posX = Math.random() * 100;
+                const delay = Math.random() * 10;
+                const duration = Math.random() * 15 + 10;
+
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.bottom = `-${size}px`;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+
+                // Случайная форма (круг или квадрат)
+                if (Math.random() > 0.7) {
+                    particle.style.borderRadius = '0';
+                    particle.style.transform = `rotate(${Math.random() * 45}deg)`;
+                }
+
+                container.appendChild(particle);
+            }
+        }
+
+        // Изменение шапки при скролле
+        function handleHeaderScroll() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            createHeroParticles();
+            createCalculatorParticles();
+            window.addEventListener('scroll', handleHeaderScroll);
+        });
+    </script>
+</body>
+</html>

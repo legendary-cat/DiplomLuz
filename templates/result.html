@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результат расчета</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .result-container {
+            width: 80%;
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .summary {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .total {
+            font-weight: bold;
+            font-size: 1.2em;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+        .details {
+            margin-top: 30px;
+        }
+        .details h2 {
+            color: #2c3e50;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .back-button {
+            display: block;
+            width: 200px;
+            margin: 30px auto 0;
+            padding: 10px;
+            background-color: #5780a5;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-button:hover {
+            background-color: #5780a5;
+        }
+
+        .create-button {
+            display: block;
+            width: 200px;
+            margin: 30px auto 0;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .create:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <h1>Результат расчета стоимости</h1>
+
+        <div class="summary">
+            <h2>Сводка</h2>
+            <div class="summary-item">
+                <span>Стоимость услуг:</span>
+                <span>{{ order_data.total_service_price }} руб.</span>
+            </div>
+            <div class="summary-item">
+                <span>Стоимость материалов:</span>
+                <span>{{ order_data.total_materials_cost }} руб.</span>
+            </div>
+            <div class="summary-item">
+                <span>Стоимость оборудования:</span>
+                <span>{{ order_data.total_equipment_cost }} руб.</span>
+            </div>
+            <div class="summary-item">
+                <span>Стоимость доставки материалов:</span>
+                <span>{{ order_data.total_materials_delivery_cost }} руб.</span>
+            </div>
+            <div class="summary-item">
+                <span>Стоимость доставки оборудования:</span>
+                <span>{{ order_data.total_equipment_delivery_cost }} руб.</span>
+            </div>
+            <div class="summary-item total">
+                <span>Итоговая стоимость:</span>
+                <span>{{ order_data.total_cost }} руб.</span>
+            </div>
+        </div>
+
+        <div class="details">
+            <h2>Детализация услуг</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Услуга</th>
+                        <th>Количество</th>
+                        <th>Цена за единицу</th>
+                        <th>Общая стоимость</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for service in order_data.services %}
+                    <tr>
+                        <td>{{ service.service_name }}</td>
+                        <td>{{ service.quantity }}</td>
+                        <td>{{ service.total_price/service.quantity }} руб.</td>
+                        <td>{{ service.total_price }} руб.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="details">
+            <h2>Используемые материалы</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Материал</th>
+                        <th>Количество</th>
+                        <th>Цена за м³</th>
+                        <th>Общая стоимость</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for material in order_data.materials %}
+                    <tr>
+                        <td>{{ material.material_name }}</td>
+                        <td>{{ material.quantity }} м³</td>
+                        <td>{{ material.total_price/material.quantity }} руб.</td>
+                        <td>{{ material.total_price }} руб.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="details">
+            <h2>Используемое оборудование</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Оборудование</th>
+                        <th>Количество</th>
+                        <th>Общая стоимость</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for equipment in order_data.equipment %}
+                    <tr>
+                        <td>{{ equipment.equipment_name }}</td>
+                        <td>{{ equipment.quantity }}</td>
+                        <td>{{ equipment.total_price }} руб.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <a href="/order_create" class="create-button">Оформить заказ</a>
+        <a href="/calc_front" class="back-button">Вернуться к калькулятору</a>
+
+    </div>
+</body>
+</html>

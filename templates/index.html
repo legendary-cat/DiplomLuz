@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор дорожных услуг</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .calculator-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+
+        .section {
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .section-title {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .section-title:hover {
+            background-color: #2980b9;
+        }
+
+        .section-content {
+            display: none;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+
+        .service-item {
+            margin-bottom: 12px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        input[type="number"] {
+            width: 100px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+
+        .calculate-btn {
+            background-color: #27ae60;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: block;
+            margin: 25px auto 0;
+        }
+
+        .calculate-btn:hover {
+            background-color: #219653;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .confirm-btn {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .cancel-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 15px;
+            font-weight: bold;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-container {
+                padding: 15px;
+            }
+
+            input[type="number"] {
+                width: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <h2>Онлайн-калькулятор стоимости услуг</h2>
+        <p>Рассчитайте стоимость ремонта и укладки дорог онлайн</p>
+
+        <div class="section">
+            <div class="section-title" onclick="toggleSection(this)">
+                <span>🛣 Асфальтирование</span>
+            </div>
+            <div class="section-content">
+                <div class="service-item">
+                    <label>
+                        <input type="checkbox" id="asphalt-laying">
+                        Укладка асфальта
+                    </label>
+                    Площадь (м²): <input type="number" id="asphalt-laying-area" oninput="autoActivate(this, 'asphalt-laying')">
+                </div>
+                <div class="service-item">
+                    <label>
+                        <input type="checkbox" id="two-layer-asphalt">
+                        Двухслойное асфальтирование
+                    </label>
+                    Площадь (м²): <input type="number" id="two-layer-asphalt-area" oninput="autoActivate(this, 'two-layer-asphalt')">
+                </div>
+                <div class="service-item">
+                    <label>
+                        <input type="checkbox" id="private-area-asphalt">
+                        Асфальтирование частных территорий
+                    </label>
+                    Площадь (м²): <input type="number" id="private-area-asphalt-area" oninput="autoActivate(this, 'private-area-asphalt')">
+                </div>
+                <div class="service-item">
+                    <label>
+                        <input type="checkbox" id="asphalt-patching">
+                        Ямочный ремонт асфальта
+                    </label>
+                    Площадь (м²): <input type="number" id="asphalt-patching-area" oninput="autoActivate(this, 'asphalt-patching')">
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title" onclick="toggleSection(this)">
+                <span>🏡 Благоустройство</span>
+            </div>
+            <div class="section-content">
+                <div class="service-item">
+                    <label>
+                        <input type="checkbox" id="road-border-install">
+                        Установка дорожного бордюра
+                    </label>
+                    Длина (м): <input type="number" id="road-border-install-length" oninput="autoActivate(this, 'road-border-install')">
+                </div>
+                <div class="service-item">
+                    <label>
+                        <input type="checkbox" id="pavement-border-install">
+                        Установка тротуарного бордюра
+                    </label>
+                    Длина (м): <input type="number" id="pavement-border-install-length" oninput="autoActivate(this, 'pavement-border-install')">
+                </div>
+                <div class="service-item">
+                    <label>
+                        <input type="checkbox" id="pavement-tile-laying">
+                        Укладка тротуарной плитки
+                    </label>
+                    Площадь (м²): <input type="number" id="pavement-tile-laying-area" oninput="autoActivate(this, 'pavement-tile-laying')">
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title" onclick="toggleSection(this)">
+                <span>🚧 Демонтажные работы</span>
+            </div>
+            <div class="section-content">
+                <div class="service-item">
+                    <label>
+                        <input type="checkbox" id="manual-asphalt-removal">
+                        Разработка асфальтобетонного покрытия вручную
+                    </label>
+                    Площадь (м²): <input type="number" id="manual-asphalt-removal-area" oninput="autoActivate(this, 'manual-asphalt-removal')">
+                </div>
+                <div class="service-item">
+                    <label>
+                        <input type="checkbox" id="asphalt-milling">
+                        Фрезерование асфальтобетонного покрытия
+                    </label>
+                    Площадь (м²): <input type="number" id="asphalt-milling-area" oninput="autoActivate(this, 'asphalt-milling')">
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title" onclick="toggleSection(this)">
+                <span>🎨 Дополнительные услуги</span>
+            </div>
+            <div class="section-content">
+                <div class="service-item">
+                    <label>
+                        <input type="checkbox" id="paint-marking">
+                        Нанесение разметки краской
+                    </label>
+                    Площадь (м²): <input type="number" id="paint-marking-area" oninput="autoActivate(this, 'paint-marking')">
+                </div>
+                <div class="service-item">
+                    <label>
+                        <input type="checkbox" id="road-sign-install">
+                        Установка дорожных знаков
+                    </label>
+                    Количество: <input type="number" id="road-sign-install-quantity" oninput="autoActivate(this, 'road-sign-install')">
+                </div>
+                <div class="service-item">
+                    <label>
+                        <input type="checkbox" id="debris-removal">
+                        Вывоз строительного мусора
+                    </label>
+                    Объем (м³): <input type="number" id="debris-removal-volume" oninput="autoActivate(this, 'debris-removal')">
+                </div>
+            </div>
+        </div>
+
+        <button class="calculate-btn" onclick="showConfirmation()">Рассчитать</button>
+
+        <div id="confirmationModal" class="modal">
+            <div class="modal-content">
+                <h3>Подтверждение расчета</h3>
+                <p>Вы уверены, что все необходимые услуги выбраны и параметры указаны верно?</p>
+                <div class="modal-buttons">
+                    <button class="modal-btn confirm-btn" onclick="submitForm()">Да, рассчитать</button>
+                    <button class="modal-btn cancel-btn" onclick="hideConfirmation()">Нет, вернуться</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+    </div>
+
+    <script>
+        function toggleSection(header) {
+            const content = header.nextElementSibling;
+            content.style.display = content.style.display === "block" ? "none" : "block";
+        }
+
+        // Initialize all sections to be closed
+        document.querySelectorAll('.section-content').forEach(content => {
+            content.style.display = 'none';
+        });
+
+        function autoActivate(inputElement, checkboxId) {
+            const checkbox = document.getElementById(checkboxId);
+            if (inputElement.value !== '') {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+        }
+
+        function showConfirmation() {
+            document.getElementById('confirmationModal').style.display = 'flex';
+        }
+
+        function hideConfirmation() {
+            document.getElementById('confirmationModal').style.display = 'none';
+        }
+
+        async function submitForm() {
+            hideConfirmation();
+
+            // Prepare data for API request
+            const services = [];
+
+            // Mapping between form elements and service names in DB
+            const serviceMapping = {
+                "asphalt-laying": "Укладка асфальта",
+                "two-layer-asphalt": "Двухслойное асфальтирование",
+                "private-area-asphalt": "Асфальтирование частных территорий",
+                "asphalt-patching": "Ямочный ремонт",
+                "road-border-install": "Установка дорожного бордюра",
+                "pavement-border-install": "Установка тротуарного бордюра",
+                "pavement-tile-laying": "Укладка тротуарной плитки",
+                "manual-asphalt-removal": "Разработка асфальтобетонного покрытия толщ. 5 см. ручная",
+                "asphalt-milling": "Фрезерование асфальтобетонного покрытия толщ. 5 см.",
+                "paint-marking": "Нанесение разметки краской",
+                "road-sign-install": "Установка дорожных знаков",
+                "debris-removal": "Вывоз строительного мусора"
+            };
+
+            for (const [elementId, serviceName] of Object.entries(serviceMapping)) {
+                const checkbox = document.getElementById(elementId);
+                if (!checkbox || !checkbox.checked) continue;
+
+                let inputValue = 0;
+                const areaInput = document.getElementById(`${elementId}-area`);
+                const lengthInput = document.getElementById(`${elementId}-length`);
+                const quantityInput = document.getElementById(`${elementId}-quantity`);
+                const volumeInput = document.getElementById(`${elementId}-volume`);
+
+                if (areaInput && areaInput.value) {
+                    inputValue = parseFloat(areaInput.value);
+                } else if (lengthInput && lengthInput.value) {
+                    inputValue = parseFloat(lengthInput.value);
+                } else if (quantityInput && quantityInput.value) {
+                    inputValue = parseFloat(quantityInput.value);
+                } else if (volumeInput && volumeInput.value) {
+                    inputValue = parseFloat(volumeInput.value);
+                }
+
+                if (inputValue > 0) {
+                    services.push({
+                        service_name: serviceName,
+                        quantity: inputValue
+                    });
+                }
+            }
+
+            if (services.length === 0) {
+                showError("Пожалуйста, выберите хотя бы одну услугу с ненулевым количеством");
+                return;
+            }
+
+            const requestData = {
+                services: services
+            };
+
+            try {
+                const response = await fetch('/calc_inp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Ошибка при расчете стоимости');
+                }
+
+                const data = await response.json();
+
+                // Save results to sessionStorage for the results page
+                sessionStorage.setItem('calculationResults', JSON.stringify(data));
+
+                // Redirect to results page
+                window.location.href = '/get_redis_data';
+
+            } catch (error) {
+                console.error('Error:', error);
+                showError(error.message || 'Произошла ошибка при расчете стоимости. Пожалуйста, попробуйте снова.');
+            }
+        }
+
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+
+            // Hide error after 5 seconds
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

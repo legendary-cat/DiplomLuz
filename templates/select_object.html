@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выбор объекта</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .user-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .object-list {
+            margin: 20px 0;
+        }
+        .object-item {
+            padding: 15px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .object-item:hover {
+            background: #f5f5f5;
+        }
+        .object-item.selected {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+        .add-object-header {
+            margin-top: 30px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .add-object-header:hover {
+            background: #e9ecef;
+        }
+        .add-object-form {
+            padding: 15px 0;
+            display: none; /* Изначально скрыта */
+        }
+        .add-object-form.visible {
+            display: block; /* Показываем при активации */
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-secondary {
+            background: #6c757d;
+        }
+        .toggle-icon {
+            font-size: 1.2em;
+            transition: transform 0.3s;
+        }
+        .toggle-icon.rotated {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="user-info">
+            <h2>{{ client.client_last_name }} {{ client.client_name }}</h2>
+            <p>{{ client.client_email }}</p>
+        </div>
+
+        <h1>Выберите объект для заказа</h1>
+
+        <div class="object-list">
+            {% if not objects %}
+                <p>У вас пока нет объектов. Добавьте новый объект.</p>
+            {% else %}
+                {% for obj in objects %}
+                <div class="object-item" onclick="selectObject({{ obj.id_obj }})">
+                    <h3>{{ obj.obj_name }}</h3>
+                    <p>{{ obj.obj_city }}, {{ obj.obj_addres }}</p>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="add-object-header" onclick="toggleAddObjectForm()">
+            <h2>Добавить новый объект</h2>
+            <span class="toggle-icon">▼</span>
+        </div>
+
+        <div class="add-object-form" id="addObjectFormContainer">
+            <form id="addObjectForm">
+                <div class="form-group">
+                    <label for="objName">Название объекта:</label>
+                    <input type="text" id="objName" required>
+                </div>
+                <div class="form-group">
+                    <label for="objCity">Город:</label>
+                    <input type="text" id="objCity" required>
+                </div>
+                <div class="form-group">
+                    <label for="objAddress">Адрес:</label>
+                    <input type="text" id="objAddress" required>
+                </div>
+                <button type="submit" class="btn">Добавить объект</button>
+            </form>
+        </div>
+
+        <div style="margin-top: 30px; text-align: center;">
+            <button id="confirmBtn" class="btn" style="display: none;" onclick="confirmOrder()">Подтвердить заказ</button>
+            <a href="/calc_front" class="btn btn-secondary">Отмена</a>
+        </div>
+    </div>
+
+    <script>
+        let selectedObjectId = null;
+        let addObjectFormVisible = false;
+
+        function toggleAddObjectForm() {
+            const formContainer = document.getElementById('addObjectFormContainer');
+            const toggleIcon = document.querySelector('.toggle-icon');
+
+            addObjectFormVisible = !addObjectFormVisible;
+
+            if (addObjectFormVisible) {
+                formContainer.classList.add('visible');
+                toggleIcon.classList.add('rotated');
+            } else {
+                formContainer.classList.remove('visible');
+                toggleIcon.classList.remove('rotated');
+            }
+        }
+
+        function selectObject(objId) {
+            selectedObjectId = objId;
+            document.querySelectorAll('.object-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            document.getElementById('confirmBtn').style.display = 'inline-block';
+        }
+
+        async function confirmOrder() {
+            if (selectedObjectId) {
+                window.location.href = `/order_create?object_id=${selectedObjectId}`;
+            }
+        }
+
+        document.getElementById('addObjectForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const objData = {
+                obj_name: document.getElementById('objName').value,
+                obj_city: document.getElementById('objCity').value,
+                obj_addres: document.getElementById('objAddress').value
+            };
+
+            try {
+                const response = await fetch('/api/objects', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(objData),
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    alert('Ошибка при добавлении объекта');
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при добавлении объекта');
+            }
+        });
+    </script>
+</body>
+</html>
