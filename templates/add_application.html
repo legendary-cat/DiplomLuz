@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание заявки на поставку</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        .header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 15px 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .home-btn {
+            background: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+            align-self: flex-start;
+        }
+        .home-btn:hover {
+            background: #0d8bf2;
+            transform: translateY(-2px);
+        }
+        .supply-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .supply-section {
+            flex: 1;
+            min-width: 350px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .supply-section h2 {
+            margin-top: 0;
+            color: #2196F3;
+            font-size: 1.3rem;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .add-btn {
+            width: 100%;
+            margin-top: 15px;
+            padding: 10px;
+            font-size: 0.9rem;
+        }
+        .btn {
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #3e9c42;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        .btn-secondary:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #e53935;
+            transform: translateY(-2px);
+        }
+        .submit-btn {
+            display: block;
+            width: 250px;
+            margin: 30px auto;
+            padding: 12px;
+            font-size: 1rem;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            width: 400px;
+            max-width: 90%;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            animation: slideDown 0.3s;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-header {
+            margin-bottom: 20px;
+        }
+        .modal-header h3 {
+            margin: 0;
+            color: #333;
+            font-size: 1.3rem;
+        }
+        .modal-body {
+            margin-bottom: 25px;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            z-index: 1100;
+            animation: slideIn 0.3s, fadeOut 0.5s 2.5s forwards;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        .error-notification {
+            background: #f44336;
+        }
+        .success-notification {
+            background: #4CAF50;
+        }
+        .supply-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            transition: all 0.3s;
+            flex-wrap: wrap;
+        }
+        .supply-item:hover {
+            background: #f0f0f0;
+        }
+        .supply-item select, .supply-item input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            min-width: 0;
+            flex: 1 1 120px;
+        }
+        .supply-item .provider-select {
+            flex: 1 1 180px;
+            background-color: #f8f9fa;
+        }
+        .supply-item input[type="number"] {
+            width: 80px;
+        }
+        .remove-btn {
+            padding: 8px 12px;
+            font-size: 1rem;
+            line-height: 1;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        .error-border {
+            border: 1px solid #f44336 !important;
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        .total-price {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-weight: bold;
+            text-align: right;
+        }
+        .provider-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .provider-section h2 {
+            margin-top: 0;
+            color: #2196F3;
+            font-size: 1.3rem;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .provider-select-main {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+        .btn-disabled {
+            background: #e0e0e0 !important;
+            color: #a0a0a0 !important;
+            cursor: not-allowed !important;
+            pointer-events: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/profile" class="home-btn">← Назад в личный кабинет</a>
+        <h1>Создание заявки на поставку</h1>
+    </div>
+
+    <!-- Секция выбора поставщика -->
+    <div class="provider-section">
+        <h2>Поставщик</h2>
+        <select id="main-provider-select" class="provider-select-main" required>
+            <option value="">Выберите поставщика</option>
+            {% for provider in providers %}
+                <option value="{{ provider.id_provider }}">{{ provider.provider_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="supply-container">
+        <!-- Секция материалов -->
+        <div class="supply-section">
+            <h2>Материалы</h2>
+            <div id="materials-container" class="empty-state">
+                Нет добавленных материалов
+            </div>
+            <button id="add-material-btn" class="btn btn-secondary add-btn" onclick="addMaterialItem()">
+                + Добавить материал
+            </button>
+        </div>
+
+        <!-- Секция оборудования -->
+        <div class="supply-section">
+            <h2>Оборудование</h2>
+            <div id="equipment-container" class="empty-state">
+                Нет добавленного оборудования
+            </div>
+            <button id="add-equipment-btn" class="btn btn-secondary add-btn" onclick="addEquipmentItem()">
+                + Добавить оборудование
+            </button>
+        </div>
+    </div>
+
+    <button class="btn btn-primary submit-btn" onclick="submitSupplyRequest()">
+        Оформить заявку
+    </button>
+
+    <!-- Модальное окно подтверждения -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Подтверждение заявки</h3>
+            </div>
+            <div class="modal-body">
+                <p>Вы уверены, что хотите оформить эту заявку? После подтверждения изменить ее будет невозможно.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="confirmSubmit()">Подтвердить</button>
+                <button class="btn btn-secondary" onclick="cancelSubmit()">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Шаблон для строки материала -->
+    <template id="material-template">
+        <div class="supply-item">
+            <select name="material" required>
+                <option value="">Выберите материал</option>
+                {% for material in materials %}
+                    <option value="{{ material.id_material }}" data-price="{{ material.material_price_of_one }}">
+                        {{ material.material_name }} ({{ material.material_price_of_one }} ₽/{{ material.material_unit_quantity }})
+                    </option>
+                {% endfor %}
+            </select>
+            <input type="number" name="quantity" placeholder="Кол-во" min="1" value="1" required>
+            <button class="btn btn-danger remove-btn" onclick="removeItem(this)">×</button>
+        </div>
+    </template>
+
+    <!-- Шаблон для строки оборудования -->
+    <template id="equipment-template">
+        <div class="supply-item">
+            <select name="equipment" required>
+                <option value="">Выберите оборудование</option>
+                {% for equip in equipment %}
+                    <option value="{{ equip.id_equipment }}" data-price="{{ equip.equipment_ammortiz }}">
+                        {{ equip.equipment_name }} (Амортизация: {{ equip.equipment_ammortiz }} ₽)
+                    </option>
+                {% endfor %}
+            </select>
+            <input type="number" name="quantity" placeholder="Кол-во" min="1" value="1" required>
+            <button class="btn btn-danger remove-btn" onclick="removeItem(this)">×</button>
+        </div>
+    </template>
+
+    <script>
+        // Добавление новой строки для материалов
+        function addMaterialItem() {
+            const container = document.getElementById('materials-container');
+            const template = document.getElementById('material-template');
+            const clone = template.content.cloneNode(true);
+
+            if (container.classList.contains('empty-state')) {
+                container.innerHTML = '';
+                container.classList.remove('empty-state');
+            }
+
+            container.appendChild(clone);
+            showNotification('Добавлена строка для материала', 'success');
+
+            // Делаем кнопку добавления оборудования неактивной
+            document.getElementById('add-equipment-btn').classList.add('btn-disabled');
+
+            // Обновляем обработчик удаления для нового элемента
+            const removeBtn = container.lastElementChild.querySelector('.remove-btn');
+            removeBtn.onclick = function() {
+                removeItem(this);
+                // Проверяем, есть ли еще материалы
+                if (container.children.length === 0) {
+                    // Если материалов нет, активируем кнопку оборудования
+                    document.getElementById('add-equipment-btn').classList.remove('btn-disabled');
+                }
+            };
+        }
+
+        // Добавление новой строки для оборудования
+        function addEquipmentItem() {
+            const container = document.getElementById('equipment-container');
+            const template = document.getElementById('equipment-template');
+            const clone = template.content.cloneNode(true);
+
+            if (container.classList.contains('empty-state')) {
+                container.innerHTML = '';
+                container.classList.remove('empty-state');
+            }
+
+            container.appendChild(clone);
+            showNotification('Добавлена строка для оборудования', 'success');
+
+            // Делаем кнопку добавления материалов неактивной
+            document.getElementById('add-material-btn').classList.add('btn-disabled');
+
+            // Обновляем обработчик удаления для нового элемента
+            const removeBtn = container.lastElementChild.querySelector('.remove-btn');
+            removeBtn.onclick = function() {
+                removeItem(this);
+                // Проверяем, есть ли еще оборудование
+                if (container.children.length === 0) {
+                    // Если оборудования нет, активируем кнопку материалов
+                    document.getElementById('add-material-btn').classList.remove('btn-disabled');
+                }
+            };
+        }
+
+        // Удаление строки
+        function removeItem(button) {
+            const item = button.parentElement;
+            const container = item.parentElement;
+
+            item.remove();
+
+            // Если больше нет элементов, показываем сообщение
+            if (container.children.length === 0) {
+                container.innerHTML = container.id === 'materials-container' ?
+                    'Нет добавленных материалов' : 'Нет добавленного оборудования';
+                container.classList.add('empty-state');
+
+                // Активируем обе кнопки, так как контейнеры пусты
+                document.getElementById('add-material-btn').classList.remove('btn-disabled');
+                document.getElementById('add-equipment-btn').classList.remove('btn-disabled');
+            }
+
+            showNotification('Позиция удалена', 'success');
+        }
+
+        // Показ уведомления
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}-notification`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            // Автоматическое удаление уведомления
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Проверка заполненности формы
+        function validateForm() {
+            const providerId = document.getElementById('main-provider-select').value;
+            if (!providerId) {
+                showNotification('Выберите поставщика', 'error');
+                return false;
+            }
+
+            let isValid = true;
+            let emptyFields = 0;
+
+            // Проверяем материалы
+            const materialItems = document.querySelectorAll('#materials-container .supply-item');
+            materialItems.forEach(item => {
+                const material = item.querySelector('select[name="material"]');
+                const quantity = item.querySelector('input[name="quantity"]');
+
+                if (!material.value || !quantity.value || quantity.value <= 0) {
+                    isValid = false;
+                    emptyFields++;
+                    material.classList.add('error-border');
+                    quantity.classList.add('error-border');
+                    setTimeout(() => {
+                        material.classList.remove('error-border');
+                        quantity.classList.remove('error-border');
+                    }, 1000);
+                }
+            });
+
+            // Проверяем оборудование
+            const equipmentItems = document.querySelectorAll('#equipment-container .supply-item');
+            equipmentItems.forEach(item => {
+                const equipment = item.querySelector('select[name="equipment"]');
+                const quantity = item.querySelector('input[name="quantity"]');
+
+                if (!equipment.value || !quantity.value || quantity.value <= 0) {
+                    isValid = false;
+                    emptyFields++;
+                    equipment.classList.add('error-border');
+                    quantity.classList.add('error-border');
+                    setTimeout(() => {
+                        equipment.classList.remove('error-border');
+                        quantity.classList.remove('error-border');
+                    }, 1000);
+                }
+            });
+
+            // Если нет ни одного элемента
+            if (materialItems.length === 0 && equipmentItems.length === 0) {
+                showNotification('Добавьте хотя бы одну позицию (материал или оборудование)', 'error');
+                return false;
+            }
+
+            if (!isValid) {
+                showNotification(`Заполните ${emptyFields} обязательных полей`, 'error');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Подтверждение отправки заявки
+        function submitSupplyRequest() {
+            if (!validateForm()) return;
+
+            document.getElementById('confirmationModal').style.display = 'flex';
+        }
+
+        function cancelSubmit() {
+            document.getElementById('confirmationModal').style.display = 'none';
+        }
+
+        async function confirmSubmit() {
+            const providerSelect = document.getElementById('main-provider-select');
+            const providerId = providerSelect ? providerSelect.value : null;
+
+            if (!providerId) {
+                showNotification('Выберите поставщика', 'error');
+                return;
+            }
+
+            // Собираем данные
+            const requestData = {
+                provider_id: Number(providerId),
+                materials: [],
+                equipment: []
+            };
+
+            // Материалы
+            document.querySelectorAll('#materials-container .supply-item').forEach(item => {
+                const material = item.querySelector('select[name="material"]');
+                const quantity = item.querySelector('input[name="quantity"]');
+
+                if (material.value && quantity.value) {
+                    requestData.materials.push({
+                        material_id: Number(material.value),
+                        quantity: Number(quantity.value)
+                    });
+                }
+            });
+
+            // Оборудование
+            document.querySelectorAll('#equipment-container .supply-item').forEach(item => {
+                const equip = item.querySelector('select[name="equipment"]');
+                const quantity = item.querySelector('input[name="quantity"]');
+
+                if (equip.value && quantity.value) {
+                    requestData.equipment.push({
+                        equipment_id: Number(equip.value),
+                        quantity: Number(quantity.value)
+                    });
+                }
+            });
+
+            try {
+                const response = await fetch('/super_user/submit_supply', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Ошибка сервера');
+                }
+
+                const result = await response.json();
+
+                if (result.redirect_url) {
+                    window.location.href = result.redirect_url;
+                } else {
+                    showNotification('Заявка успешно создана!', 'success');
+                    // Можно добавить сброс формы или другие действия
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                showNotification(`Ошибка: ${error.message}`, 'error');
+            } finally {
+                document.getElementById('confirmationModal').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

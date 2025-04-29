@@ -29,6 +29,7 @@ from math import ceil
 
 from users.dependencies import get_current_client
 from users.router import router as router_user
+from super_user.super_user_router import router as super_user_router
 from jose import JWTError, jwt
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from redis import Redis
@@ -52,6 +53,7 @@ app.mount('/static', StaticFiles(directory='static'), 'static')
 templates = Jinja2Templates(directory='templates')
 
 app.include_router(router_user)
+app.include_router(super_user_router)
 
 ###################################################################################################################
 ###################################################################################################################
@@ -412,8 +414,8 @@ async def create_order(
     result = await db.execute(query)
     client_objects = result.scalars().all()
 
-    if not client_objects:
-        raise HTTPException(status_code=400, detail="У вас нет объектов. Сначала создайте объект.")
+    #if not client_objects:
+    #    raise HTTPException(status_code=400, detail="У вас нет объектов. Сначала создайте объект.")
 
     # Если объект уже выбран (из query параметра)
     if object_id:
@@ -602,14 +604,16 @@ async def user_profile(
     orders_per_page = 5
     objects_per_page = 3
 
-    # Информация о клиенте
+    # Информация о клиенте (добавляем is_admin)
     client_info = {
+        "id_client": client.id_client,
         "full_name": f"{getattr(client, 'client_last_name', '')} {client.client_name}",
         "email": getattr(client, 'client_email', ''),
-        "discount": getattr(client, 'discount', 0)  # Добавляем скидку
+        "discount": getattr(client, 'client_self_sale', 0),  # Исправлено на client_self_sale
+        "is_admin": getattr(client, 'is_admin', False)  # Добавляем проверку на админа
     }
 
-    # Запрос заказов (сортировка по дате - новые сначала)
+    # Остальной код остается без изменений
     orders_query = (
         select(Order)
         .where(Order.id_client == client.id_client)
@@ -621,7 +625,6 @@ async def user_profile(
     orders_result = await db.execute(orders_query)
     orders = orders_result.scalars().all()
 
-    # Запрос объектов клиента (сортировка по ID)
     objects_query = (
         select(Object)
         .where(Object.id_client == client.id_client)
@@ -632,7 +635,6 @@ async def user_profile(
     objects_result = await db.execute(objects_query)
     client_objects = objects_result.scalars().all()
 
-    # Подсчет общего количества заказов и объектов
     total_orders = (
         await db.execute(select(func.count()).select_from(Order).where(Order.id_client == client.id_client))).scalar()
     total_objects = (

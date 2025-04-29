@@ -66,6 +66,16 @@
             margin-left: 10px;
             font-size: 0.9em;
         }
+        .admin-badge {
+            background: #f44336;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 10px;
+            font-size: 0.9em;
+        }
         .objects-section {
             background: #f9f9f9;
             padding: 20px;
@@ -143,7 +153,6 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
-        /* Стили для заказов (из предыдущей версии) */
         .orders-list {
             margin-bottom: 30px;
         }
@@ -213,6 +222,10 @@
             background: #f44336;
             color: white;
         }
+        .btn-warning {
+            background: #ff9800;
+            color: white;
+        }
         .btn:hover {
             opacity: 0.9;
             transform: translateY(-2px);
@@ -241,9 +254,12 @@
     </style>
 </head>
 <body>
-     <div class="header">
+    <div class="header">
         <div class="header-left">
             <a href="/" class="home-btn">На главную</a>
+            {% if client_info.is_admin %}
+                <a href="/super_user/create_supply" class="btn btn-warning">Создать заявку на поставку</a>
+            {% endif %}
         </div>
         <h1 class="header-title">Личный кабинет</h1>
         <div class="header-right">
@@ -258,6 +274,9 @@
                 <div style="margin-bottom: 10px;">
                     <strong>ФИО:</strong> {{ client_info.full_name }}
                     <span class="discount-badge">Скидка {{ client_info.discount }}%</span>
+                    {% if client_info.is_admin %}
+                        <span class="admin-badge">Администратор</span>
+                    {% endif %}
                 </div>
                 <div>
                     <strong>Email:</strong> {{ client_info.email }}

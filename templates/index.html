@@ -13,6 +13,29 @@
             color: #333;
         }
 
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
         .calculator-container {
             max-width: 900px;
             margin: 0 auto;
@@ -172,6 +195,10 @@
     </style>
 </head>
 <body>
+    <div class="header">
+        <a href="/" class="back-btn">← Вернуться на главную</a>
+    </div>
+
     <div class="calculator-container">
         <h2>Онлайн-калькулятор стоимости услуг</h2>
         <p>Рассчитайте стоимость ремонта и укладки дорог онлайн</p>

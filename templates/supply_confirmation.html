@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подтверждение заявки на поставку</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background-color: #f9fafb;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .home-btn {
+            display: inline-block;
+            background: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .confirmation-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        .info-row {
+            display: flex;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .info-label {
+            font-weight: 600;
+            min-width: 200px;
+            color: #555;
+        }
+        .items-section {
+            margin: 20px 0;
+        }
+        .item-card {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .item-header {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .total-section {
+            text-align: center;
+            padding: 20px;
+            background: #f0f8ff;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .total-amount {
+            font-size: 1.8em;
+            color: #2196F3;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            background-color: #FFF3CD;
+            color: #856404;
+        }
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #2196F3;
+            color: white;
+        }
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/super_user/create_supply" class="home-btn">Создать новую заявку</a>
+        <h1>Заявка на поставку №{{ application_id }}</h1>
+    </div>
+
+    <div class="confirmation-card">
+        <div class="info-row">
+            <div class="info-label">Дата заявки:</div>
+            <div class="info-value">{{ application_date.strftime('%d.%m.%Y') }}</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">Статус:</div>
+            <div class="info-value">
+                <span class="status">Ожидает поставки</span>
+            </div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">Поставщик:</div>
+            <div class="info-value">
+                {% if provider %}
+                    {{ provider.provider_name }}
+                {% else %}
+                    Не указан
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if materials %}
+    <div class="items-section">
+        <h2>Материалы</h2>
+        {% for mat_app, material in materials %}
+        <div class="item-card">
+            <div class="item-header">{{ material.material_name }}</div>
+            <div>Количество: {{ mat_app.applic_material_quantity }} {{ material.material_unit_quantity }}</div>
+            <div>Цена за единицу: {{ material.material_price_of_one }} ₽</div>
+            <div>Общая стоимость: {{ mat_app.applic_material_quantity * material.material_price_of_one }} ₽</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if equipment %}
+    <div class="items-section">
+        <h2>Оборудование</h2>
+        {% for equip_app, equip in equipment %}
+        <div class="item-card">
+            <div class="item-header">{{ equip.equipment_name }}</div>
+            <div>Количество: {{ equip_app.applic_equipment_quantity }}</div>
+            <div>Амортизация: {{ equip.equipment_ammortiz }} ₽</div>
+            <div>Общая стоимость: {{ equip_app.applic_equipment_quantity * equip.equipment_ammortiz }} ₽</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="total-section">
+        <h3>Общая стоимость заявки</h3>
+        <div class="total-amount">{{ total_cost }} ₽</div>
+    </div>
+
+    <div class="actions">
+        <a href="/super_user/create_supply" class="btn btn-primary">Создать новую заявку</a>
+        <a href="/profile" class="btn btn-secondary">Вернуться в кабинет</a>
+    </div>
+</body>
+</html>

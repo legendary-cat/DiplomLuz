@@ -62,25 +62,33 @@ class OrderService(Base):
 
 class MaterialApplication(Base):
     __tablename__ = 'Заявка_на_поставку_материалов'
-    id_material = Column(Integer, ForeignKey('Материалы.id_material'), primary_key=True)
+    id_applic_material = Column(Integer, primary_key=True, autoincrement=True)#
+    id_material = Column(Integer, ForeignKey('Материалы.id_material'), primary_key=True)#
     applic_material_quantity = Column(Integer, nullable=True)
     data_applic_material = Column(Date, nullable=True)
-    id_provider = Column(Integer, ForeignKey('Поставщики.id_provider'), primary_key=True)
+    id_provider = Column(Integer, ForeignKey('Поставщики.id_provider'), primary_key=True)#
     id_postavka = Column(Integer, ForeignKey('Поставки.id_postavka'), nullable=False)
     applic_material_status = Column(String(20), nullable=True)
+
+    ################################################################################
     provider = relationship("Provider", back_populates="material_applications")
     postavka = relationship("Postavka", back_populates="material_applications")
+    material = relationship("Material", back_populates="material_applications")
 
 class EquipmentApplication(Base):
     __tablename__ = 'Заявка_на_поставку_оборудования'
-    id_provider = Column(Integer, ForeignKey('Поставщики.id_provider'), primary_key=True)
-    id_equipment = Column(Integer, ForeignKey('Оборудование.id_equipment'), primary_key=True)
+    id_applic_equipment = Column(Integer, primary_key=True, autoincrement=True)#
+    id_provider = Column(Integer, ForeignKey('Поставщики.id_provider'), primary_key=True)#
+    id_equipment = Column(Integer, ForeignKey('Оборудование.id_equipment'), primary_key=True)#
     applic_equipment_quantity = Column(Integer, nullable=True)
     data_applic_equipment = Column(Date, nullable=True)
     id_postavka = Column(Integer, ForeignKey('Поставки.id_postavka'), nullable=False)
     applic_equipment_status = Column(String(20), nullable=True)
+
+    #######################################################################################
     provider = relationship("Provider", back_populates="equipment_applications")
     postavka = relationship("Postavka", back_populates="equipment_applications")
+    equipment_rel = relationship("Equipment")  # Измененное имя отношения
 
 class Client(Base):
     __tablename__ = 'Клиенты'
@@ -116,6 +124,9 @@ class Material(Base):
     orders = relationship("OrderMaterial", back_populates="material")
     services = relationship("ServiceMaterial", back_populates="material")
 
+    ##
+    material_applications = relationship("MaterialApplication", back_populates="material")
+
 class Equipment(Base):
     __tablename__ = 'Оборудование'
     id_equipment = Column(Integer, primary_key=True)
@@ -131,6 +142,7 @@ class Equipment(Base):
     postavka = relationship("Postavka", back_populates="equipments")
     orders = relationship("OrderEquipment", back_populates="equipment")
     service_links = relationship("ServiceEquipment", back_populates="equipment")
+    applications = relationship("EquipmentApplication", back_populates="equipment_rel")
 
 class Object(Base):
     __tablename__ = 'Объекты'
