@@ -157,6 +157,14 @@
             justify-content: space-between;
             width: 100%;
         }
+        .category-total {
+            text-align: right;
+            margin-top: 15px;
+            padding: 12px 15px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -173,7 +181,7 @@
             </span>
         </div>
         <p style="color: #666; margin-top: 5px;">
-            Дата оформления: {{ order.ord_data.strftime('%d.%m.%Y %H:%M') }}
+            Дата оформления: {{ order.ord_data.strftime('%d.%m.%Y') }}
         </p>
     </div>
 
@@ -238,6 +246,9 @@
                     </div>
                 </div>
                 {% endfor %}
+                <div class="category-total">
+                    Итого по материалам: {{ "%.2f"|format(materials|sum(attribute='total_price')) }} ₽
+                </div>
             {% else %}
                 <p>Материалы не указаны</p>
             {% endif %}
@@ -262,6 +273,9 @@
                     </div>
                 </div>
                 {% endfor %}
+                <div class="category-total">
+                    Итого по оборудованию: {{ "%.2f"|format(equipment|sum(attribute='total_price')) }} ₽
+                </div>
             {% else %}
                 <p>Оборудование не указано</p>
             {% endif %}
@@ -286,6 +300,9 @@
                     </div>
                 </div>
                 {% endfor %}
+                <div class="category-total">
+                    Итого по услугам: {{ "%.2f"|format(services|sum(attribute='total_price')) }} ₽
+                </div>
             {% else %}
                 <p>Услуги не указаны</p>
             {% endif %}

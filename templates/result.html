@@ -5,203 +5,645 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Результат расчета</title>
     <style>
+        :root {
+            --md-sys-color-primary: #1a73e8;
+            --md-sys-color-on-primary: #ffffff;
+            --md-sys-color-primary-container: #d4e3ff;
+            --md-sys-color-on-primary-container: #001c3e;
+            --md-sys-color-secondary: #5a5d72;
+            --md-sys-color-on-secondary: #ffffff;
+            --md-sys-color-secondary-container: #dfe1f9;
+            --md-sys-color-on-secondary-container: #171b2c;
+            --md-sys-color-tertiary: #755571;
+            --md-sys-color-on-tertiary: #ffffff;
+            --md-sys-color-tertiary-container: #ffd6f9;
+            --md-sys-color-on-tertiary-container: #2c122b;
+            --md-sys-color-error: #ba1a1a;
+            --md-sys-color-error-container: #ffdad6;
+            --md-sys-color-on-error: #ffffff;
+            --md-sys-color-on-error-container: #410002;
+            --md-sys-color-background: #fefbff;
+            --md-sys-color-on-background: #1b1b1f;
+            --md-sys-color-surface: #fefbff;
+            --md-sys-color-on-surface: #1b1b1f;
+            --md-sys-color-surface-variant: #e2e2ec;
+            --md-sys-color-on-surface-variant: #45464f;
+            --md-sys-color-outline: #757680;
+            --md-sys-color-inverse-on-surface: #f2f0f4;
+            --md-sys-color-inverse-surface: #303034;
+            --md-sys-color-inverse-primary: #a6c8ff;
+            --md-sys-color-shadow: #000000;
+            --md-sys-color-surface-tint: #1a73e8;
+            --md-sys-color-outline-variant: #c5c6d0;
+            --md-sys-color-scrim: #000000;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f8f9fa;
             margin: 0;
             padding: 20px;
+            color: var(--md-sys-color-on-background);
         }
+
         .result-container {
-            width: 80%;
             max-width: 1000px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            background-color: var(--md-sys-color-surface);
+            padding: 30px 40px;
+            border-radius: 24px;
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
         }
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-        }
-        .summary {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        .summary-item {
+
+        .header-container {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
+            align-items: center;
+            margin-bottom: 30px;
         }
-        .total {
-            font-weight: bold;
-            font-size: 1.2em;
-            border-top: 1px solid #ddd;
-            padding-top: 10px;
-            margin-top: 10px;
+
+        .home-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0 16px 0 12px;
+            height: 40px;
+            background-color: var(--md-sys-color-surface);
+            color: var(--md-sys-color-primary);
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-right: 20px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--md-sys-color-outline-variant);
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
         }
+
+        .home-button::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--md-sys-color-primary);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .home-button:hover {
+            background-color: var(--md-sys-color-primary-container);
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 4px 8px 3px rgba(0,0,0,0.05);
+        }
+
+        .home-button:active::after {
+            opacity: 0.1;
+        }
+
+        .home-button i {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+
+        h1 {
+            flex-grow: 1;
+            text-align: center;
+            color: var(--md-sys-color-on-surface);
+            margin: 0;
+            font-size: 24px;
+            font-weight: 500;
+        }
+
         .details {
-            margin-top: 30px;
+            margin-bottom: 40px;
         }
+
         .details h2 {
-            color: #2c3e50;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 5px;
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: 16px;
+            font-size: 18px;
+            font-weight: 500;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--md-sys-color-outline-variant);
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 16px;
+            font-size: 14px;
         }
+
         th, td {
-            padding: 10px;
+            padding: 12px 16px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid var(--md-sys-color-outline-variant);
         }
+
         th {
-            background-color: #f8f9fa;
+            background-color: var(--md-sys-color-surface-variant);
+            font-weight: 500;
+            color: var(--md-sys-color-on-surface-variant);
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
         }
+
         tr:hover {
-            background-color: #f5f5f5;
+            background-color: var(--md-sys-color-surface-variant);
         }
-        .back-button {
-            display: block;
-            width: 200px;
-            margin: 30px auto 0;
-            padding: 10px;
-            background-color: #5780a5;
-            color: white;
+
+        .category-total {
+            text-align: right;
+            font-weight: 500;
+            margin-top: 16px;
+            color: var(--md-sys-color-on-surface);
+            font-size: 15px;
+            padding: 12px 16px;
+            background-color: var(--md-sys-color-surface-variant);
+            border-radius: 12px;
+        }
+
+        .summary {
+            background-color: var(--md-sys-color-surface-variant);
+            padding: 24px;
+            border-radius: 16px;
+            margin-top: 32px;
+            border: 1px solid var(--md-sys-color-outline-variant);
+        }
+
+        .summary h2 {
+            font-size: 18px;
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+            padding: 8px 0;
+            align-items: center;
+        }
+
+        .summary-item.delivery {
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        .summary-item.total {
+            font-weight: 500;
+            font-size: 16px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--md-sys-color-outline-variant);
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .back-button, .create-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 220px;
+            height: 40px;
+            margin: 30px 12px 0;
+            padding: 0 24px;
+            color: var(--md-sys-color-on-primary);
             text-align: center;
             text-decoration: none;
-            border-radius: 5px;
-        }
-        .back-button:hover {
-            background-color: #5780a5;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
+            position: relative;
+            overflow: hidden;
         }
 
         .create-button {
-            display: block;
-            width: 200px;
-            margin: 30px auto 0;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 5px;
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            white-space: nowrap;
         }
-        .create:hover {
-            background-color: #45a049;
+
+        .create-button::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--md-sys-color-on-primary);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .create-button:hover {
+            background-color: var(--md-sys-color-primary);
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 4px 8px 3px rgba(0,0,0,0.1);
+        }
+
+        .create-button:active::after {
+            opacity: 0.2;
+        }
+
+        .back-button {
+            background-color: var(--md-sys-color-surface);
+            color: var(--md-sys-color-primary);
+            border: 1px solid var(--md-sys-color-outline-variant);
+        }
+
+        .back-button::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--md-sys-color-primary);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .back-button:hover {
+            background-color: var(--md-sys-color-primary-container);
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 4px 8px 3px rgba(0,0,0,0.05);
+        }
+
+        .back-button:active::after {
+            opacity: 0.1;
+        }
+
+        .actions {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: var(--md-sys-color-surface);
+            margin: 15% auto;
+            padding: 24px;
+            border-radius: 24px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 4px 8px 3px rgba(0,0,0,0.1);
+            animation: modalFadeIn 0.3s;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            color: var(--md-sys-color-error);
+        }
+
+        .modal-message {
+            margin-bottom: 24px;
+            line-height: 1.5;
+            color: var(--md-sys-color-on-surface);
+            font-size: 14px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .modal-button {
+            padding: 10px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-button::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: currentColor;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .modal-button:active::after {
+            opacity: 0.2;
+        }
+
+        .modal-button-cancel {
+            background-color: var(--md-sys-color-surface);
+            color: var(--md-sys-color-primary);
+            border: 1px solid var(--md-sys-color-outline-variant);
+        }
+
+        .modal-button-cancel:hover {
+            background-color: var(--md-sys-color-primary-container);
+        }
+
+        .modal-button-confirm {
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+        }
+
+        .modal-button-confirm:hover {
+            background-color: var(--md-sys-color-primary);
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 4px 8px 3px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 768px) {
+            .result-container {
+                padding: 20px 16px;
+                border-radius: 16px;
+            }
+
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .home-button {
+                margin-bottom: 16px;
+                margin-right: 0;
+            }
+
+            h1 {
+                text-align: left;
+                font-size: 20px;
+                margin-bottom: 16px;
+            }
+
+            th, td {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+
+            .back-button, .create-button {
+                width: 100%;
+                margin: 12px 0 0;
+            }
+
+            .actions {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .modal-content {
+                width: 90%;
+                margin: 30% auto;
+                padding: 20px;
+                border-radius: 16px;
+            }
         }
     </style>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="result-container">
+<div class="result-container">
+    <div class="header-container">
+        <a href="/" class="home-button">
+            <i class="material-icons">home</i>
+            На главную
+        </a>
         <h1>Результат расчета стоимости</h1>
-
-        <div class="summary">
-            <h2>Сводка</h2>
-            <div class="summary-item">
-                <span>Стоимость услуг:</span>
-                <span>{{ order_data.total_service_price }} руб.</span>
-            </div>
-            <div class="summary-item">
-                <span>Стоимость материалов:</span>
-                <span>{{ order_data.total_materials_cost }} руб.</span>
-            </div>
-            <div class="summary-item">
-                <span>Стоимость оборудования:</span>
-                <span>{{ order_data.total_equipment_cost }} руб.</span>
-            </div>
-            <div class="summary-item">
-                <span>Стоимость доставки материалов:</span>
-                <span>{{ order_data.total_materials_delivery_cost }} руб.</span>
-            </div>
-            <div class="summary-item">
-                <span>Стоимость доставки оборудования:</span>
-                <span>{{ order_data.total_equipment_delivery_cost }} руб.</span>
-            </div>
-            <div class="summary-item total">
-                <span>Итоговая стоимость:</span>
-                <span>{{ order_data.total_cost }} руб.</span>
-            </div>
-        </div>
-
-        <div class="details">
-            <h2>Детализация услуг</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Услуга</th>
-                        <th>Количество</th>
-                        <th>Цена за единицу</th>
-                        <th>Общая стоимость</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for service in order_data.services %}
-                    <tr>
-                        <td>{{ service.service_name }}</td>
-                        <td>{{ service.quantity }}</td>
-                        <td>{{ service.total_price/service.quantity }} руб.</td>
-                        <td>{{ service.total_price }} руб.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div class="details">
-            <h2>Используемые материалы</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Материал</th>
-                        <th>Количество</th>
-                        <th>Цена за м³</th>
-                        <th>Общая стоимость</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for material in order_data.materials %}
-                    <tr>
-                        <td>{{ material.material_name }}</td>
-                        <td>{{ material.quantity }} м³</td>
-                        <td>{{ material.total_price/material.quantity }} руб.</td>
-                        <td>{{ material.total_price }} руб.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div class="details">
-            <h2>Используемое оборудование</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Оборудование</th>
-                        <th>Количество</th>
-                        <th>Общая стоимость</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for equipment in order_data.equipment %}
-                    <tr>
-                        <td>{{ equipment.equipment_name }}</td>
-                        <td>{{ equipment.quantity }}</td>
-                        <td>{{ equipment.total_price }} руб.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <a href="/order_create" class="create-button">Оформить заказ</a>
-        <a href="/calc_front" class="back-button">Вернуться к калькулятору</a>
-
     </div>
+
+    <div class="details">
+        <h2>Детализация услуг</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Услуга</th>
+                    <th>Количество</th>
+                    <th>Цена за единицу</th>
+                    <th>Общая стоимость</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in order_data.services %}
+                <tr>
+                    <td>{{ service.service_name }}</td>
+                    <td>{{ service.quantity }}</td>
+                    <td>{{ "%.2f"|format(service.total_price/service.quantity) }} руб.</td>
+                    <td>{{ "%.2f"|format(service.total_price) }} руб.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="category-total">Итоговая цена услуг: {{ "%.2f"|format(order_data.total_service_price) }} руб.</div>
+    </div>
+
+    <div class="details">
+        <h2>Используемые материалы</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Материал</th>
+                    <th>Количество</th>
+                    <th>Цена за единицу</th>
+                    <th>Общая стоимость</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for material in order_data.materials %}
+                <tr>
+                    <td>{{ material.material_name }}</td>
+                    <td>{{ "%.2f"|format(material.quantity) }} {% if material.material_name != 'Грузовик' %}м³{% endif %}</td>
+                    <td>{{ "%.2f"|format(material.total_price/material.quantity) }} руб.</td>
+                    <td>{{ "%.2f"|format(material.total_price) }} руб.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="category-total">Итоговая цена материалов: {{ "%.2f"|format(order_data.total_materials_cost) }} руб.</div>
+    </div>
+
+    <div class="details">
+        <h2>Используемое оборудование</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Оборудование</th>
+                    <th>Количество</th>
+                    <th>Общая стоимость</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for equipment in order_data.equipment %}
+                <tr>
+                    <td>{{ equipment.equipment_name }}</td>
+                    <td>{{ equipment.quantity }}</td>
+                    <td>{{ "%.2f"|format(equipment.total_price + equipment.transport_price) }} руб.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="category-total">Итоговая цена оборудования: {{ "%.2f"|format(order_data.total_equipment_cost + order_data.total_equipment_delivery_cost) }} руб.</div>
+    </div>
+
+    <div class="summary">
+        <h2>Сводка по стоимости</h2>
+        <div class="summary-item">
+            <span>Стоимость услуг:</span>
+            <span>{{ "%.2f"|format(order_data.total_service_price) }} руб.</span>
+        </div>
+        <div class="summary-item">
+            <span>Стоимость материалов:</span>
+            <span>{{ "%.2f"|format(order_data.total_materials_cost) }} руб.</span>
+        </div>
+        <div class="summary-item delivery">
+            <span>Доставка материалов:</span>
+            <span>{{ "%.2f"|format(order_data.total_materials_delivery_cost) }} руб.</span>
+        </div>
+        <div class="summary-item">
+            <span>Стоимость оборудования:</span>
+            <span>{{ "%.2f"|format(order_data.total_equipment_cost) }} руб.</span>
+        </div>
+        <div class="summary-item delivery">
+            <span>Доставка оборудования:</span>
+            <span>{{ "%.2f"|format(order_data.total_equipment_delivery_cost) }} руб.</span>
+        </div>
+        <div class="summary-item">
+            <span>Общая стоимость доставки:</span>
+            <span>{{ "%.2f"|format(order_data.total_delivery_cost) }} руб.</span>
+        </div>
+        <div class="summary-item total">
+            <span>Итоговая стоимость:</span>
+            <span id="total-cost">{{ "%.2f"|format(order_data.total_cost) }} руб.</span>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button id="create-order-btn" class="create-button">
+            <span class="button-label">Оформить заказ</span>
+        </button>
+        <a href="/calc_front" class="back-button">
+            <span class="button-label">Вернуться к калькулятору</span>
+        </a>
+    </div>
+</div>
+
+<!-- Модальное окно для минимальной суммы -->
+<div id="min-order-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-title">Минимальная сумма заказа</div>
+        <div class="modal-message">
+            Заказ на сумму меньше минимальной стоимости (7 500 руб.).
+            Добавьте еще услуг или цена будет автоматически увеличена до 7 500 руб.
+        </div>
+        <div class="modal-buttons">
+            <button id="add-more-btn" class="modal-button modal-button-cancel">Добавить услуги</button>
+            <button id="continue-btn" class="modal-button modal-button-confirm">Продолжить</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const createOrderBtn = document.getElementById('create-order-btn');
+        const minOrderModal = document.getElementById('min-order-modal');
+        const addMoreBtn = document.getElementById('add-more-btn');
+        const continueBtn = document.getElementById('continue-btn');
+        const totalCostElement = document.getElementById('total-cost');
+
+        // Получаем итоговую стоимость из текста элемента
+        const totalCost = parseFloat('{{ order_data.total_cost }}');
+        const MIN_ORDER_AMOUNT = 7499;
+
+        createOrderBtn.addEventListener('click', function() {
+            if (totalCost <= MIN_ORDER_AMOUNT) {
+                // Показываем модальное окно, если сумма меньше минимальной
+                minOrderModal.style.display = 'block';
+            } else {
+                // Если сумма достаточная, переходим к оформлению
+                window.location.href = '/order_create';
+            }
+        });
+
+        addMoreBtn.addEventListener('click', function() {
+            // Перенаправляем на калькулятор
+            window.location.href = '/calc_front';
+        });
+
+        continueBtn.addEventListener('click', function() {
+            // Меняем отображаемую сумму на минимальную
+            totalCostElement.textContent = '7500.00 руб.';
+            // Скрываем модальное окно
+            minOrderModal.style.display = 'none';
+            // Перенаправляем на оформление заказа с минимальной суммой
+            window.location.href = '/order_create?force_min_amount=true';
+        });
+
+        // Закрытие модального окна при клике вне его
+        window.addEventListener('click', function(event) {
+            if (event.target === minOrderModal) {
+                minOrderModal.style.display = 'none';
+            }
+        });
+
+        // Добавляем эффект ripple для кнопок
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const circle = document.createElement("span");
+            const diameter = Math.max(button.clientWidth, button.clientHeight);
+            const radius = diameter / 2;
+
+            circle.style.width = circle.style.height = `${diameter}px`;
+            circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
+            circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
+            circle.classList.add("ripple");
+
+            const ripple = button.getElementsByClassName("ripple")[0];
+            if (ripple) {
+                ripple.remove();
+            }
+
+            button.appendChild(circle);
+        }
+
+        const buttons = document.querySelectorAll(".create-button, .back-button, .modal-button");
+        buttons.forEach(button => {
+            button.addEventListener("click", createRipple);
+        });
+    });
+</script>
 </body>
 </html>

@@ -175,7 +175,7 @@ async def supply_confirmation(
         for mat_app, material in materials:
             total_cost += mat_app.applic_material_quantity * material.material_price_of_one
         for equip_app, equip in equipment:
-            total_cost += equip_app.applic_equipment_quantity * equip.equipment_ammortiz
+            total_cost += equip_app.applic_equipment_quantity * equip.equipment_buy_price
 
         return templates.TemplateResponse(
             "supply_confirmation.html",

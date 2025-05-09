@@ -4,447 +4,815 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Личный кабинет</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #1a73e8;
+            --primary-dark: #0d5bbc;
+            --secondary-color: #34a853;
+            --error-color: #d93025;
+            --warning-color: #f9ab00;
+            --background-color: #f8f9fa;
+            --surface-color: #ffffff;
+            --text-primary: #202124;
+            --text-secondary: #5f6368;
+            --border-color: #dadce0;
+            --shadow-1: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+            --shadow-2: 0 1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --border-radius: 16px;
+            --border-radius-sm: 12px;
+            --border-radius-xs: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding: 0;
+        }
+
+        .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            color: #333;
         }
-        .header {
+
+        /* Header styles */
+        .app-header {
             display: flex;
+            align-items: center;
+            padding: 16px 24px;
+            background-color: var(--surface-color);
+            box-shadow: var(--shadow-1);
+            border-radius: var(--border-radius);
+            margin-bottom: 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            width: 100%;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
         }
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--text-primary);
         }
-        .home-btn {
-            background: #2196F3;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 4px;
+
+        /* Button styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 16px;
+            border-radius: var(--border-radius-sm);
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.25px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            outline: none;
             text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-            display: inline-block;
+            height: 40px;
+            white-space: nowrap;
         }
-        .home-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 1px 2px 0 rgba(26, 115, 232, 0.3);
         }
-        .profile-container {
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            box-shadow: 0 2px 6px 2px rgba(26, 115, 232, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(26, 115, 232, 0.04);
+        }
+
+        .btn-danger {
+            background-color: var(--error-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c62828;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: var(--text-primary);
+        }
+
+        .btn-warning:hover {
+            background-color: #f57f17;
+        }
+
+        .btn-success {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #2e7d32;
+        }
+
+        .btn-icon {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+
+        /* Card styles */
+        .card {
+            background-color: var(--surface-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-1);
+            margin-bottom: 24px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-2);
+        }
+
+        .card-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .card-body {
+            padding: 16px 24px;
+        }
+
+        /* Profile info styles */
+        .profile-info {
             display: flex;
-            gap: 30px;
+            flex-direction: column;
+            gap: 12px;
         }
-        .main-content {
-            flex: 2;
+
+        .profile-row {
+            display: flex;
+            align-items: center;
         }
-        .sidebar {
+
+        .profile-label {
+            font-weight: 500;
+            min-width: 100px;
+            color: var(--text-secondary);
+        }
+
+        .profile-value {
             flex: 1;
         }
-        .user-info-card {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 8px;
         }
-        .discount-badge {
-            background: #ff9800;
-            color: white;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-weight: bold;
-            display: inline-block;
-            margin-left: 10px;
-            font-size: 0.9em;
+
+        .badge-primary {
+            background-color: rgba(26, 115, 232, 0.1);
+            color: var(--primary-color);
         }
-        .admin-badge {
-            background: #f44336;
-            color: white;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-weight: bold;
-            display: inline-block;
-            margin-left: 10px;
-            font-size: 0.9em;
+
+        .badge-danger {
+            background-color: rgba(217, 48, 37, 0.1);
+            color: var(--error-color);
         }
-        .objects-section {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+
+        .badge-warning {
+            background-color: rgba(249, 171, 0, 0.1);
+            color: var(--warning-color);
         }
-        .objects-list {
-            max-height: 300px;
-            overflow-y: auto;
-            margin: 15px 0;
-            padding-right: 10px;
-        }
-        .object-item {
-            padding: 12px;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .object-item:hover {
-            background: #f0f0f0;
-        }
-        .object-item h4 {
-            margin: 0 0 5px 0;
-            color: #2196F3;
-        }
-        .object-item p {
-            margin: 0;
-            color: #666;
-            font-size: 0.9em;
-        }
-        .carousel-controls {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-        .carousel-btn {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 5px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9em;
-        }
-        .carousel-btn:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-        }
-        .add-object-btn {
-            width: 100%;
-            margin-top: 15px;
-            padding: 10px;
-        }
-        .hidden-form {
-            display: none;
-            margin-top: 20px;
-            padding: 15px;
-            background: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            font-size: 0.9em;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        .orders-list {
-            margin-bottom: 30px;
-        }
+
+        /* Order card styles */
         .order-card {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            transition: all 0.3s;
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 0;
+            transition: var(--transition);
         }
+
+        .order-card:last-child {
+            border-bottom: none;
+        }
+
         .order-card:hover {
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            background-color: rgba(0, 0, 0, 0.02);
         }
+
         .order-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
+            align-items: center;
+            margin-bottom: 8px;
         }
+
+        .order-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .order-date {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
         .order-body {
             display: flex;
             justify-content: space-between;
+            margin-bottom: 8px;
         }
+
         .order-details {
             flex: 1;
         }
-        .order-status {
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-weight: bold;
+
+        .order-detail {
+            font-size: 14px;
+            margin-bottom: 4px;
+            display: flex;
         }
+
+        .order-detail-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+
+        .order-status {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
         .status-created {
-            background: #e3f2fd;
+            background-color: rgba(25, 118, 210, 0.1);
             color: #1976d2;
         }
+
         .status-processing {
-            background: #fff8e1;
+            background-color: rgba(255, 143, 0, 0.1);
             color: #ff8f00;
         }
+
         .status-completed {
-            background: #e8f5e9;
+            background-color: rgba(56, 142, 60, 0.1);
             color: #388e3c;
         }
+
         .status-cancelled {
-            background: #ffebee;
+            background-color: rgba(211, 47, 47, 0.1);
             color: #d32f2f;
         }
-        .btn {
-            padding: 8px 16px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-            display: inline-block;
-            border: none;
+
+        /* Objects list styles */
+        .objects-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 16px 0;
+        }
+
+        .object-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
             cursor: pointer;
+            transition: var(--transition);
         }
-        .btn-primary {
-            background: #4CAF50;
-            color: white;
+
+        .object-item:last-child {
+            border-bottom: none;
         }
-        .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
-            border: 1px solid #ddd;
+
+        .object-item:hover {
+            background-color: rgba(0, 0, 0, 0.02);
         }
-        .btn-danger {
-            background: #f44336;
-            color: white;
+
+        .object-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--primary-color);
+            margin-bottom: 4px;
         }
-        .btn-warning {
-            background: #ff9800;
-            color: white;
+
+        .object-address {
+            font-size: 14px;
+            color: var(--text-secondary);
         }
-        .btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
+
+        /* Pagination styles */
         .pagination {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
         }
-        .pagination a {
-            padding: 8px 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            text-decoration: none;
-            color: #333;
+
+        .pagination-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: var(--transition);
         }
-        .pagination a.active {
-            background: #4CAF50;
+
+        .pagination-btn:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-page {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: transparent;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .pagination-page.active {
+            background-color: var(--primary-color);
             color: white;
-            border-color: #4CAF50;
         }
-        .pagination a:hover:not(.active) {
-            background: #f1f1f1;
+
+        /* Form styles */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-xs);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--surface-color);
+            padding: 24px;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 400px;
+            box-shadow: var(--shadow-2);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        /* Layout styles */
+        .profile-container {
+            display: flex;
+            gap: 24px;
+        }
+
+        .main-content {
+            flex: 2;
+        }
+
+        .sidebar {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .profile-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                min-width: auto;
+            }
+
+            .app-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .header-title {
+                font-size: 18px;
+            }
+
+            .card-header {
+                padding: 12px 16px;
+            }
+
+            .card-body {
+                padding: 12px 16px;
+            }
+
+            .order-body {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="header-left">
-            <a href="/" class="home-btn">На главную</a>
-            {% if client_info.is_admin %}
-                <a href="/super_user/create_supply" class="btn btn-warning">Создать заявку на поставку</a>
-            {% endif %}
-        </div>
-        <h1 class="header-title">Личный кабинет</h1>
-        <div class="header-right">
-            <a href="/auth/logout/" class="btn btn-danger">Выйти</a>
-        </div>
-    </div>
-
-    <div class="profile-container">
-        <div class="main-content">
-            <div class="user-info-card">
-                <h2>Профиль</h2>
-                <div style="margin-bottom: 10px;">
-                    <strong>ФИО:</strong> {{ client_info.full_name }}
-                    <span class="discount-badge">Скидка {{ client_info.discount }}%</span>
-                    {% if client_info.is_admin %}
-                        <span class="admin-badge">Администратор</span>
-                    {% endif %}
-                </div>
+    <div class="container">
+        <header class="app-header">
+            <div class="header-content">
                 <div>
-                    <strong>Email:</strong> {{ client_info.email }}
+                    <h1 class="header-title">Личный кабинет</h1>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    {% if client_info.is_admin %}
+                        <a href="/super_user/create_supply" class="btn btn-warning">
+                            <i class="material-icons btn-icon">add</i>
+                            Создать заявку
+                        </a>
+                    {% endif %}
+                    <a href="/" class="btn btn-secondary">
+                        <i class="material-icons btn-icon">home</i>
+                        На главную
+                    </a>
+                    <button class="btn btn-danger" id="logoutBtn">
+                        <i class="material-icons btn-icon">logout</i>
+                        Выйти
+                    </button>
                 </div>
             </div>
+        </header>
 
-            <div class="orders-list">
-                <h2>Мои заказы</h2>
-
-                {% if not orders %}
-                    <p>У вас пока нет заказов.</p>
-                {% else %}
-                    {% for order in orders %}
-                    <div class="order-card">
-                        <div class="order-header">
-                            <h3>Заказ №{{ order.id_order }}</h3>
-                            <div>
-                                <span class="order-status status-{{ order.ord_status.lower() }}">
-                                    {{ order.ord_status }}
+        <div class="profile-container">
+            <div class="main-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Профиль</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="profile-info">
+                            <div class="profile-row">
+                                <span class="profile-label">ФИО:</span>
+                                <span class="profile-value">{{ client_info.full_name }}</span>
+                                <span class="badge badge-primary">
+                                    Скидка {{ client_info.discount }}%
                                 </span>
-                                <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
-                                    {{ order.ord_data.strftime('%d.%m.%Y %H:%M') }}
-                                </div>
+                                {% if client_info.is_admin %}
+                                    <span class="badge badge-danger">
+                                        Администратор
+                                    </span>
+                                {% endif %}
                             </div>
-                        </div>
-                        <div class="order-body">
-                            <div class="order-details">
-                                <div><strong>Объект:</strong> {{ order.object.obj_name if order.object else 'Не указан' }}</div>
-                                <div><strong>Адрес:</strong> {{ order.object.obj_city }}, {{ order.object.obj_addres if order.object else '' }}</div>
-                                <div><strong>Сумма:</strong> {{ "%.2f"|format(order.ord_price) }} ₽</div>
-                            </div>
-                            <div>
-                                <a href="/order_details/{{ order.id_order }}" class="btn btn-secondary">Подробнее</a>
+                            <div class="profile-row">
+                                <span class="profile-label">Email:</span>
+                                <span class="profile-value">{{ client_info.email }}</span>
                             </div>
                         </div>
                     </div>
-                    {% endfor %}
-                {% endif %}
-
-                {% if total_order_pages > 1 %}
-                <div class="pagination">
-                    {% if current_page > 1 %}
-                        <a href="/profile?page={{ current_page - 1 }}&objects_page={{ objects_page }}">«</a>
-                    {% endif %}
-
-                    {% for page_num in range(1, total_order_pages + 1) %}
-                        <a href="/profile?page={{ page_num }}&objects_page={{ objects_page }}"
-                           {% if page_num == current_page %}class="active"{% endif %}>
-                            {{ page_num }}
-                        </a>
-                    {% endfor %}
-
-                    {% if current_page < total_order_pages %}
-                        <a href="/profile?page={{ current_page + 1 }}&objects_page={{ objects_page }}">»</a>
-                    {% endif %}
                 </div>
-                {% endif %}
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Мои заказы</h2>
+                    </div>
+                    <div class="card-body">
+                        {% if not orders %}
+                            <p>У вас пока нет заказов.</p>
+                        {% else %}
+                            {% for order in orders %}
+                            <div class="order-card">
+                                <div class="order-header">
+                                    <h3 class="order-title">Заказ №{{ order.id_order }}</h3>
+                                    <div>
+                                        <span class="order-status status-{{ order.ord_status.lower() }}">
+                                            {{ order.ord_status }}
+                                        </span>
+                                        <div class="order-date">
+                                            {{ order.ord_data.strftime("%d.%m.%Y") }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="order-body">
+                                    <div class="order-details">
+                                        <div class="order-detail">
+                                            <span class="order-detail-label">Объект:</span>
+                                            <span>{{ order.object.obj_name if order.object else 'Не указан' }}</span>
+                                        </div>
+                                        <div class="order-detail">
+                                            <span class="order-detail-label">Адрес:</span>
+                                            <span>{{ order.object.obj_city }}, {{ order.object.obj_addres if order.object else '' }}</span>
+                                        </div>
+                                        <div class="order-detail">
+                                            <span class="order-detail-label">Сумма:</span>
+                                            <span>{{ "%.2f"|format(order.ord_price) }} ₽</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <a href="/order_details/{{ order.id_order }}" class="btn btn-secondary">
+                                            <i class="material-icons btn-icon">info</i>
+                                            Подробнее
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if total_order_pages > 1 %}
+                        <div class="pagination">
+                            {% if current_page > 1 %}
+                                <button onclick="window.location.href='/profile?page={{ current_page - 1 }}&objects_page={{ objects_page }}'"
+                                        class="pagination-btn">
+                                    <i class="material-icons">chevron_left</i>
+                                </button>
+                            {% endif %}
+
+                            {% for page_num in range(1, total_order_pages + 1) %}
+                                <a href="/profile?page={{ page_num }}&objects_page={{ objects_page }}"
+                                   class="pagination-page {% if page_num == current_page %}active{% endif %}">
+                                    {{ page_num }}
+                                </a>
+                            {% endfor %}
+
+                            {% if current_page < total_order_pages %}
+                                <button onclick="window.location.href='/profile?page={{ current_page + 1 }}&objects_page={{ objects_page }}'"
+                                        class="pagination-btn">
+                                    <i class="material-icons">chevron_right</i>
+                                </button>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Мои объекты</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="objects-list">
+                            {% if not client_objects %}
+                                <p>У вас пока нет объектов</p>
+                            {% else %}
+                                {% for obj in client_objects %}
+                                <div class="object-item">
+                                    <div class="object-name">{{ obj.obj_name }}</div>
+                                    <div class="object-address">{{ obj.obj_city }}, {{ obj.obj_addres }}</div>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="pagination" style="justify-content: space-between; margin-top: 16px;">
+                            <button onclick="prevObjectsPage()"
+                                    class="btn btn-secondary"
+                                    {% if objects_page <= 1 %}disabled{% endif %}>
+                                <i class="material-icons btn-icon">chevron_left</i>
+                                Назад
+                            </button>
+                            <span style="display: flex; align-items: center;">
+                                Страница {{ objects_page }} из {{ total_object_pages }}
+                            </span>
+                            <button onclick="nextObjectsPage()"
+                                    class="btn btn-secondary"
+                                    {% if objects_page >= total_object_pages %}disabled{% endif %}>
+                                Вперед
+                                <i class="material-icons btn-icon">chevron_right</i>
+                            </button>
+                        </div>
+
+                        <button onclick="toggleAddObjectForm()" class="btn btn-primary" style="width: 100%; margin-top: 16px;">
+                            <i class="material-icons btn-icon">add</i>
+                            Добавить объект
+                        </button>
+
+                        <div id="addObjectForm" style="display: none; margin-top: 16px;">
+                            <form id="newObjectForm">
+                                <div class="form-group">
+                                    <label class="form-label">Название объекта</label>
+                                    <input type="text" id="objName" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Город</label>
+                                    <input type="text" id="objCity" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Адрес</label>
+                                    <input type="text" id="objAddress" class="form-input" required>
+                                </div>
+                                <div style="display: flex; gap: 8px; margin-top: 16px;">
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="material-icons btn-icon">save</i>
+                                        Сохранить
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="toggleAddObjectForm()">
+                                        <i class="material-icons btn-icon">close</i>
+                                        Отмена
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
 
-        <div class="sidebar">
-            <div class="objects-section">
-                <h2>Мои объекты</h2>
-
-                <div class="objects-list">
-                    {% if not client_objects %}
-                        <p>У вас пока нет объектов</p>
-                    {% else %}
-                        {% for obj in client_objects %}
-                        <div class="object-item">
-                            <h4>{{ obj.obj_name }}</h4>
-                            <p>{{ obj.obj_city }}, {{ obj.obj_addres }}</p>
-                        </div>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-
-                <div class="carousel-controls">
-                    <button onclick="prevObjectsPage()"
-                            class="carousel-btn"
-                            {% if objects_page <= 1 %}disabled{% endif %}>
-                        ← Назад
-                    </button>
-                    <span>Стр. {{ objects_page }}/{{ total_object_pages }}</span>
-                    <button onclick="nextObjectsPage()"
-                            class="carousel-btn"
-                            {% if objects_page >= total_object_pages %}disabled{% endif %}>
-                        Вперед →
-                    </button>
-                </div>
-
-                <button onclick="toggleAddObjectForm()" class="btn btn-primary add-object-btn">
-                    Добавить объект
+    <!-- Модальное окно подтверждения выхода -->
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title">Подтверждение выхода</h3>
+            <p>Вы уверены, что хотите выйти из личного кабинета?</p>
+            <div class="modal-actions">
+                <button id="cancelLogout" class="btn btn-secondary">
+                    <i class="material-icons btn-icon">close</i>
+                    Отмена
                 </button>
-
-                <div id="addObjectForm" class="hidden-form">
-                    <form id="newObjectForm">
-                        <div class="form-group">
-                            <label for="objName">Название объекта</label>
-                            <input type="text" id="objName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="objCity">Город</label>
-                            <input type="text" id="objCity" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="objAddress">Адрес</label>
-                            <input type="text" id="objAddress" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Сохранить</button>
-                        <button type="button" class="btn btn-secondary" onclick="toggleAddObjectForm()" style="margin-left: 10px;">
-                            Отмена
-                        </button>
-                    </form>
-                </div>
+                <button id="confirmLogout" class="btn btn-danger">
+                    <i class="material-icons btn-icon">logout</i>
+                    Выйти
+                </button>
             </div>
         </div>
     </div>
 
     <script>
-        // Переключение формы добавления объекта
         function toggleAddObjectForm() {
-            const form = document.getElementById('addObjectForm');
-            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            const form = document.getElementById("addObjectForm");
+            form.style.display = form.style.display === "none" || form.style.display === "" ? "block" : "none";
         }
 
-        // Навигация по объектам
-        function prevObjectsPage() {
-            if ({{ objects_page }} > 1) {
-                window.location.href = `/profile?page={{ current_page }}&objects_page={{ objects_page - 1 }}`;
+        // Модальное окно подтверждения выхода
+        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutModal = document.getElementById('logoutModal');
+        const confirmLogout = document.getElementById('confirmLogout');
+        const cancelLogout = document.getElementById('cancelLogout');
+
+        logoutBtn.onclick = function() {
+            logoutModal.style.display = 'flex';
+        }
+
+        confirmLogout.onclick = function() {
+            window.location.href = '/auth/logout/';
+        }
+
+        cancelLogout.onclick = function() {
+            logoutModal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target === logoutModal) {
+                logoutModal.style.display = 'none';
             }
+        }
+
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        function goToObjectsPage(page) {
+            const ordersPage = getQueryParam('page') || 1;
+            window.location.href = `/profile?page=${ordersPage}&objects_page=${page}`;
         }
 
         function nextObjectsPage() {
-            if ({{ objects_page }} < {{ total_object_pages }}) {
-                window.location.href = `/profile?page={{ current_page }}&objects_page={{ objects_page + 1 }}`;
-            }
+            const currentPage = parseInt(getQueryParam('objects_page') || '1');
+            goToObjectsPage(currentPage + 1);
         }
 
-        // Обработка формы добавления объекта
-        document.getElementById('newObjectForm').addEventListener('submit', async function(e) {
+        function prevObjectsPage() {
+            const currentPage = parseInt(getQueryParam('objects_page') || '1');
+            goToObjectsPage(currentPage - 1);
+        }
+
+        document.getElementById("newObjectForm").addEventListener("submit", async function (e) {
             e.preventDefault();
 
-            const objData = {
-                obj_name: document.getElementById('objName').value,
-                obj_city: document.getElementById('objCity').value,
-                obj_addres: document.getElementById('objAddress').value
-            };
+            const objName = document.getElementById("objName").value.trim();
+            const objCity = document.getElementById("objCity").value.trim();
+            const objAddress = document.getElementById("objAddress").value.trim();
 
             try {
-                const response = await fetch('/api/objects', {
-                    method: 'POST',
+                const response = await fetch("/api/objects", {
+                    method: "POST",
                     headers: {
-                        'Content-Type': 'application/json'
+                        "Content-Type": "application/json"
                     },
-                    body: JSON.stringify(objData),
-                    credentials: 'include'
+                    body: JSON.stringify({
+                        obj_name: objName,
+                        obj_city: objCity,
+                        obj_addres: objAddress
+                    })
                 });
 
-                if (response.ok) {
-                    window.location.reload();
-                } else {
-                    const error = await response.json();
-                    alert(error.detail || 'Ошибка при добавлении объекта');
+                if (!response.ok) {
+                    throw new Error("Ошибка при сохранении объекта");
                 }
+
+                const data = await response.json();
+                console.log("Объект добавлен:", data);
+                window.location.reload();
             } catch (error) {
-                console.error('Ошибка:', error);
-                alert('Произошла ошибка при добавлении объекта');
+                console.error(error);
+                alert("Не удалось добавить объект");
             }
         });
     </script>

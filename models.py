@@ -110,6 +110,7 @@ class Client(Base):
     #вот тут может быть пробелма
     orders = relationship("Order", back_populates="client")
     objects = relationship("Object", back_populates="client")
+
 class Material(Base):
     __tablename__ = 'Материалы'
     id_material = Column(Integer, primary_key=True)
@@ -137,6 +138,7 @@ class Equipment(Base):
     equipment_ammortiz = Column(Integer, nullable=True)
     equipment_capacity = Column(Integer, nullable=True)
     equipment_transport_price_of_one = Column(Numeric, nullable=True)
+    equipment_buy_price = Column(Numeric, nullable=True)
 
     id_postavka = Column(Integer, ForeignKey('Поставки.id_postavka'), nullable=False)
     postavka = relationship("Postavka", back_populates="equipments")

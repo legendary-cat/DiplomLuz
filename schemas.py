@@ -173,6 +173,7 @@ class EquipmentBase(BaseModel):
     equipment_use_start: Optional[date] = None
     equipment_use_end: Optional[date] = None
     equipment_ammortiz: Optional[int] = None
+    equipment_buy_price: Optional[float] = None
     id_postavka: int
 
 class EquipmentCreate(EquipmentBase):
@@ -372,11 +373,13 @@ class EquipmentInfo(BaseModel):
     equipment_name: str  # Название оборудования
     quantity: int        # Количество оборудования
     total_price: float   # Общая стоимость оборудования
+    transport_price: float
 
 class ServiceInfo(BaseModel):
     service_name: str  # Название Услуги
     quantity: int        # Количество Услуги
     total_price: float   # Общая стоимость Услуг
+
 class ServicePriceResponse(BaseModel):
     service_name: str            # Название услуги
     total_service_price: float   # Общая стоимость услуги

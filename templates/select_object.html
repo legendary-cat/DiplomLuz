@@ -4,116 +4,299 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Выбор объекта</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+        :root {
+            --primary-color: #6750A4;
+            --primary-hover: #7C6BAF;
+            --on-primary: #FFFFFF;
+            --surface: #FFFBFE;
+            --on-surface: #1C1B1F;
+            --surface-variant: #E7E0EC;
+            --outline: #79747E;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 20px;
+            padding: 0;
         }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            color: var(--on-surface);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
         .container {
-            max-width: 800px;
+            max-width: 840px;
             margin: 0 auto;
-            background: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        .user-info {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
+
+        .app-bar {
+            display: flex;
+            align-items: center;
+            padding: 16px 0;
+            margin-bottom: 8px;
         }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            margin-right: 16px;
+            color: var(--primary-color);
+        }
+
+        .back-button:hover {
+            background-color: rgba(103, 80, 164, 0.08);
+        }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--on-surface);
+        }
+
+        .user-card {
+            background-color: var(--surface);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .user-card h2 {
+            font-size: 20px;
+            font-weight: 500;
+            margin: 0 0 8px 0;
+        }
+
+        .user-card p {
+            font-size: 14px;
+            margin: 0;
+            color: #666;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            margin: 24px 0 16px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
         .object-list {
-            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
         }
+
         .object-item {
-            padding: 15px;
-            border: 1px solid #ddd;
-            margin-bottom: 10px;
-            border-radius: 5px;
+            background-color: var(--surface);
+            border-radius: 12px;
+            padding: 16px;
             cursor: pointer;
-            transition: all 0.3s;
+            border: 1px solid #eee;
+            transition: background-color 0.2s;
         }
+
         .object-item:hover {
-            background: #f5f5f5;
+            background-color: var(--surface-variant);
         }
+
         .object-item.selected {
-            background: #e3f2fd;
-            border-color: #2196f3;
+            background-color: #EADDFF;
+            border-color: var(--primary-color);
         }
-        .add-object-header {
-            margin-top: 30px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 5px;
-            cursor: pointer;
+
+        .object-item h3 {
+            font-size: 16px;
+            font-weight: 500;
+            margin: 0 0 4px 0;
+        }
+
+        .object-item p {
+            font-size: 14px;
+            margin: 0;
+            color: #666;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 0;
+            color: #666;
+        }
+
+        .empty-state .material-icons {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: #999;
+        }
+
+        .empty-state p {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .expandable-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 16px;
+            background-color: var(--surface);
+            border-radius: 12px;
+            cursor: pointer;
+            margin-bottom: 8px;
+            border: 1px solid #eee;
         }
-        .add-object-header:hover {
-            background: #e9ecef;
+
+        .expandable-header h2 {
+            font-size: 16px;
+            font-weight: 500;
+            margin: 0;
         }
+
         .add-object-form {
-            padding: 15px 0;
-            display: none; /* Изначально скрыта */
+            background-color: var(--surface);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            display: none;
+            border: 1px solid #eee;
         }
+
         .add-object-form.visible {
-            display: block; /* Показываем при активации */
+            display: block;
         }
+
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 16px;
         }
+
         .form-group label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #666;
         }
+
         .form-group input {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 12px 16px;
+            font-size: 16px;
+            border: 1px solid var(--outline);
+            border-radius: 8px;
+            background-color: var(--surface);
         }
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            border: none;
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .button {
+            padding: 10px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
         }
-        .btn-secondary {
-            background: #6c757d;
+
+        .button.primary {
+            background-color: var(--primary-color);
+            color: var(--on-primary);
         }
-        .toggle-icon {
-            font-size: 1.2em;
-            transition: transform 0.3s;
+
+        .button.primary:hover {
+            background-color: var(--primary-hover);
         }
-        .toggle-icon.rotated {
-            transform: rotate(180deg);
+
+        .button.secondary {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--outline);
+        }
+
+        .button.secondary:hover {
+            background-color: rgba(103, 80, 164, 0.08);
+        }
+
+        .button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 16px;
+            }
+
+            .button-group {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: var(--surface);
+                padding: 16px;
+                justify-content: space-between;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            }
+
+            .button {
+                flex: 1;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="user-info">
-            <h2>{{ client.client_last_name }} {{ client.client_name }}</h2>
+        <div class="app-bar">
+            <button class="back-button" id="backButton" aria-label="Назад">
+                <span class="material-icons">arrow_back</span>
+            </button>
+            <h1 class="header-title">Выбор объекта</h1>
+        </div>
+
+        <div class="user-card">
+            <h2>{{ client.client_last_name }} {{ client.client_name }} {{ client.client_mid_name }}</h2>
             <p>{{ client.client_email }}</p>
         </div>
 
-        <h1>Выберите объект для заказа</h1>
+        <div class="section-title">Ваши объекты</div>
 
         <div class="object-list">
             {% if not objects %}
-                <p>У вас пока нет объектов. Добавьте новый объект.</p>
+                <div class="empty-state">
+                    <span class="material-icons">location_off</span>
+                    <p>У вас пока нет объектов. Добавьте новый объект.</p>
+                </div>
             {% else %}
                 {% for obj in objects %}
-                <div class="object-item" onclick="selectObject({{ obj.id_obj }})">
+                <div class="object-item" onclick="selectObject(this, {{ obj.id_obj }})">
                     <h3>{{ obj.obj_name }}</h3>
                     <p>{{ obj.obj_city }}, {{ obj.obj_addres }}</p>
                 </div>
@@ -121,32 +304,35 @@
             {% endif %}
         </div>
 
-        <div class="add-object-header" onclick="toggleAddObjectForm()">
+        <div class="expandable-header" id="expandableHeader" onclick="toggleAddObjectForm()">
             <h2>Добавить новый объект</h2>
-            <span class="toggle-icon">▼</span>
+            <span class="material-icons">expand_more</span>
         </div>
 
         <div class="add-object-form" id="addObjectFormContainer">
             <form id="addObjectForm">
                 <div class="form-group">
-                    <label for="objName">Название объекта:</label>
-                    <input type="text" id="objName" required>
+                    <label for="objName">Название объекта</label>
+                    <input type="text" id="objName" required placeholder="Например: Офисный центр">
                 </div>
                 <div class="form-group">
-                    <label for="objCity">Город:</label>
-                    <input type="text" id="objCity" required>
+                    <label for="objCity">Город</label>
+                    <input type="text" id="objCity" required placeholder="Например: Москва">
                 </div>
                 <div class="form-group">
-                    <label for="objAddress">Адрес:</label>
-                    <input type="text" id="objAddress" required>
+                    <label for="objAddress">Адрес</label>
+                    <input type="text" id="objAddress" required placeholder="Например: ул. Ленина, д. 42">
                 </div>
-                <button type="submit" class="btn">Добавить объект</button>
+                <div class="button-group">
+                    <button type="button" class="button secondary" onclick="toggleAddObjectForm()">Отмена</button>
+                    <button type="submit" class="button primary">Добавить</button>
+                </div>
             </form>
         </div>
 
-        <div style="margin-top: 30px; text-align: center;">
-            <button id="confirmBtn" class="btn" style="display: none;" onclick="confirmOrder()">Подтвердить заказ</button>
-            <a href="/calc_front" class="btn btn-secondary">Отмена</a>
+        <div class="button-group" id="mainButtonGroup">
+            <button id="cancelBtn" class="button secondary">Отмена</button>
+            <button id="confirmBtn" class="button primary" disabled>Подтвердить</button>
         </div>
     </div>
 
@@ -154,31 +340,51 @@
         let selectedObjectId = null;
         let addObjectFormVisible = false;
 
+        document.addEventListener('DOMContentLoaded', function() {
+            // Настройка кнопки "Назад"
+            document.getElementById('backButton').addEventListener('click', function() {
+                window.location.href = '/calc_front';
+            });
+
+            // Кнопка отмены
+            document.getElementById('cancelBtn').addEventListener('click', function() {
+                window.location.href = '/calc_front';
+            });
+
+            // Кнопка подтверждения
+            document.getElementById('confirmBtn').addEventListener('click', confirmOrder);
+        });
+
         function toggleAddObjectForm() {
             const formContainer = document.getElementById('addObjectFormContainer');
-            const toggleIcon = document.querySelector('.toggle-icon');
+            const expandableHeader = document.getElementById('expandableHeader');
 
             addObjectFormVisible = !addObjectFormVisible;
 
             if (addObjectFormVisible) {
                 formContainer.classList.add('visible');
-                toggleIcon.classList.add('rotated');
+                expandableHeader.querySelector('.material-icons').textContent = 'expand_less';
             } else {
                 formContainer.classList.remove('visible');
-                toggleIcon.classList.remove('rotated');
+                expandableHeader.querySelector('.material-icons').textContent = 'expand_more';
             }
         }
 
-        function selectObject(objId) {
-            selectedObjectId = objId;
+        function selectObject(element, objId) {
+            // Удаляем выделение со всех элементов
             document.querySelectorAll('.object-item').forEach(item => {
                 item.classList.remove('selected');
             });
-            event.currentTarget.classList.add('selected');
-            document.getElementById('confirmBtn').style.display = 'inline-block';
+
+            // Добавляем выделение к выбранному элементу
+            element.classList.add('selected');
+            selectedObjectId = objId;
+
+            // Активируем кнопку подтверждения
+            document.getElementById('confirmBtn').disabled = false;
         }
 
-        async function confirmOrder() {
+        function confirmOrder() {
             if (selectedObjectId) {
                 window.location.href = `/order_create?object_id=${selectedObjectId}`;
             }
@@ -193,7 +399,11 @@
                 obj_addres: document.getElementById('objAddress').value
             };
 
+            const btn = this.querySelector('button[type="submit"]');
+
             try {
+                btn.disabled = true;
+
                 const response = await fetch('/api/objects', {
                     method: 'POST',
                     headers: {
@@ -206,10 +416,12 @@
                 if (response.ok) {
                     window.location.reload();
                 } else {
+                    btn.disabled = false;
                     alert('Ошибка при добавлении объекта');
                 }
             } catch (error) {
                 console.error('Ошибка:', error);
+                btn.disabled = false;
                 alert('Произошла ошибка при добавлении объекта');
             }
         });

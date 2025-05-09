@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>{{ item.name }} | Дорожные Технологии</title>
     <style>
         :root {
@@ -10,7 +10,6 @@
             --secondary-color: #3498db;
             --accent-color: #e74c3c;
             --light-color: #ecf0f1;
-            --dark-color: #2c3e50;
         }
 
         * {
@@ -76,7 +75,7 @@
             max-height: 500px;
             object-fit: contain;
             border-radius: 10px;
-            background-color: #f5f5f5; /* Фон для пустых областей */
+            background-color: #f5f5f5;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
         }
@@ -90,8 +89,8 @@
         }
 
         .item-price {
-            display: inline-flex;  /* Изменено на flex для лучшего контроля */
-            align-items: center;   /* Выравниваем элементы по центру */
+            display: inline-flex;
+            align-items: center;
             background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
             color: white;
             padding: 10px 25px;
@@ -100,21 +99,12 @@
             font-size: 1.2rem;
             margin-bottom: 20px;
             box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
-            white-space: nowrap;   /* Запрещаем перенос строк */
-        }
-
-        .item-price .unit-separator {
-            margin: 0 4px;         /* Отступы слева и справа от "/" */
-            font-size: 1.1em;
-            opacity: 0.8;
-            position: relative;
-            top: -1px;             /* Небольшая вертикальная корректировка */
+            white-space: nowrap;
         }
 
         .item-unit {
-            color: white;
             font-size: 0.9rem;
-            margin-left: 0;
+            margin-left: 8px;
             opacity: 0.8;
         }
 
@@ -124,7 +114,8 @@
             margin-bottom: 20px;
         }
 
-        .materials-section, .equipment-section {
+        .materials-section,
+        .equipment-section {
             margin-top: 30px;
             padding-top: 20px;
             border-top: 1px solid #eee;
@@ -159,23 +150,29 @@
         }
 
         .bottom-btn {
-            display: block;
-            width: 200px;
-            margin: 40px auto 20px;
-            text-align: center;
-            background: linear-gradient(135deg, var(--accent-color), #c0392b);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--secondary-color); /* Синий цвет кнопки */
             color: white;
             padding: 12px 25px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+            font-size: 1rem;
+        }
+
+        .bottom-btn svg {
+            margin-right: 8px;
+            width: 20px;
+            height: 20px;
         }
 
         .bottom-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
         }
 
         @media (max-width: 768px) {
@@ -211,7 +208,7 @@
 
     <h1 class="title">{{ item.name }}</h1>
 
-    <img src="{{ item.image }}" alt="{{ item.name }}" class="item-image">
+    <img src="{{ item.image }}" alt="{{ item.name }}" class="item-image" />
 
     <div class="item-content">
         <div class="item-price">
@@ -222,55 +219,62 @@
 
         {% if item.category == "services" %}
             {% if item.materials %}
-            <div class="materials-section">
-                <h3 class="section-title">Необходимые материалы</h3>
-                <table class="items-table">
-                    <thead>
-                        <tr>
-                            <th>Материал</th>
-                            <th>Количество</th>
-                            <th>Цена за единицу</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for material in item.materials %}
-                        <tr>
-                            <td>{{ material.name }}</td>
-                            <td>{{ material.quantity }} {{ material.unit }}</td>
-                            <td>{{ "%.2f"|format(material.price) }} ₽</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                <div class="materials-section">
+                    <h3 class="section-title">Необходимые материалы</h3>
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th>Материал</th>
+                                <th>Количество</th>
+                                <th>Цена за единицу</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for material in item.materials %}
+                            <tr>
+                                <td>{{ material.name }}</td>
+                                <td>{{ material.quantity }} {{ material.unit }}</td>
+                                <td>{{ "%.2f"|format(material.price) }} ₽</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             {% endif %}
 
             {% if item.equipments %}
-            <div class="equipment-section">
-                <h3 class="section-title">Используемое оборудование</h3>
-                <table class="items-table">
-                    <thead>
-                        <tr>
-                            <th>Оборудование</th>
-                            <th>Количество</th>
-                            <th>Стоимость использования</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for equipment in item.equipments %}
-                        <tr>
-                            <td>{{ equipment.name }}</td>
-                            <td>{{ equipment.quantity }} шт.</td>
-                            <td>{{ "%.2f"|format(equipment.price) }} ₽</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                <div class="equipment-section">
+                    <h3 class="section-title">Используемое оборудование</h3>
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th>Оборудование</th>
+                                <th>Количество</th>
+                                <th>Стоимость использования</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for equipment in item.equipments %}
+                            <tr>
+                                <td>{{ equipment.name }}</td>
+                                <td>{{ equipment.quantity }} шт.</td>
+                                <td>{{ "%.2f"|format(equipment.price) }} ₽</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             {% endif %}
         {% endif %}
     </div>
 
-    <a href="javascript:history.back()" class="bottom-btn">Вернуться назад</a>
+    <div style="text-align: center;">
+        <a href="javascript:history.back()" class="bottom-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Вернуться назад
+        </a>
+    </div>
 </body>
 </html>

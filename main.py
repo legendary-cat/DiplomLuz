@@ -409,13 +409,16 @@ async def create_order(
     except json.JSONDecodeError:
         raise HTTPException(status_code=400, detail="Неверный формат данных расчета")
 
+    MIN_ORDER_AMOUNT = 7500
+    total_cost = float(order_data["total_cost"])
+
+    if total_cost < MIN_ORDER_AMOUNT:
+        order_data["total_cost"] = MIN_ORDER_AMOUNT
+
     # Получаем объекты пользователя
     query = select(Object).where(Object.id_client == client.id_client)
     result = await db.execute(query)
     client_objects = result.scalars().all()
-
-    #if not client_objects:
-    #    raise HTTPException(status_code=400, detail="У вас нет объектов. Сначала создайте объект.")
 
     # Если объект уже выбран (из query параметра)
     if object_id:
@@ -542,13 +545,13 @@ async def order_success(
 
     # Форматируем данные для отображения
     client_info = {
-        "full_name": full_name,
+        "full_name": f"{getattr(client, 'client_last_name', '')} {client.client_name} {getattr(client, 'client_mid_name', '')}",
         "email": email,
         "object_name": getattr(order_object, 'obj_name', 'Не указан') if order_object else "Не указан",
         "object_address": f"{getattr(order_object, 'obj_city', '')}, {getattr(order_object, 'obj_addres', '')}".strip(
             ', ') if order_object else "",
         "order_price": f"{getattr(order, 'ord_price', 0):.2f} ₽",
-        "order_date": getattr(order, 'ord_data', datetime.now()).strftime("%d.%m.%Y %H:%M"),
+        "order_date": getattr(order, 'ord_data', datetime.now()).strftime("%d.%m.%Y"),
         "order_status": getattr(order, 'ord_status', 'Неизвестен')
     }
 
@@ -607,7 +610,7 @@ async def user_profile(
     # Информация о клиенте (добавляем is_admin)
     client_info = {
         "id_client": client.id_client,
-        "full_name": f"{getattr(client, 'client_last_name', '')} {client.client_name}",
+        "full_name": f"{getattr(client, 'client_last_name', '')} {client.client_name} {getattr(client, 'client_mid_name', '')}",
         "email": getattr(client, 'client_email', ''),
         "discount": getattr(client, 'client_self_sale', 0),  # Исправлено на client_self_sale
         "is_admin": getattr(client, 'is_admin', False)  # Добавляем проверку на админа
@@ -618,7 +621,7 @@ async def user_profile(
         select(Order)
         .where(Order.id_client == client.id_client)
         .options(selectinload(Order.object))
-        .order_by(Order.ord_data.desc())
+        .order_by(Order.id_order.desc())
         .offset((page - 1) * orders_per_page)
         .limit(orders_per_page)
     )
@@ -726,7 +729,7 @@ async def order_details(
             "material": material,
             "ord_material_quantity": order_material.ord_material_quantity,
             "total_price": total_price,
-            "unit_price": total_price/order_material.ord_material_quantity
+            "unit_price": total_price/order_material.ord_material_quantity if order_material.ord_material_quantity else 0
         })
 
     equipment_data = []
@@ -735,7 +738,7 @@ async def order_details(
             "equipment": equip,
             "ord_equipment_quantity": order_equip.ord_equipment_quantity,
             "total_price": total_price,
-            "unit_price": total_price/order_equip.ord_equipment_quantity
+            "unit_price": total_price/order_equip.ord_equipment_quantity if order_equip.ord_equipment_quantity else 0
         })
 
     services_data = []
@@ -899,6 +902,24 @@ async def log_requests(request: Request, call_next):
     return response
 ##################################################################################################################
 ##################################################################################################################
+#энд-поинты для того, чтобы можно было вернутся назад и изменить введенные в калькулятор данные,а не заполнять с 0
+@app.get("/api/current_user")
+async def get_current_user_endpoint(
+    client: Client = Depends(get_current_client)
+) -> dict:
+    return {"id_client": client.id_client}
+
+@app.get("/api/get_calculation")
+async def get_user_calculation(
+    user_id: int,
+    redis: Redis = Depends(get_redis)
+) -> dict:
+    redis_key = f"order_result:{user_id}"
+    redis_data = redis.get(redis_key)
+    if redis_data:
+        return json.loads(redis_data)
+    return {}
+
 
 
 #python main.py

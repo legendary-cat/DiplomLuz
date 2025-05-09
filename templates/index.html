@@ -4,127 +4,328 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Калькулятор дорожных услуг</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f5f5f5;
+        :root {
+            --primary-color: #1a73e8;
+            --primary-dark: #0d5bbc;
+            --secondary-color: #34a853;
+            --error-color: #d93025;
+            --warning-color: #f9ab00;
+            --background-color: #f8f9fa;
+            --surface-color: #ffffff;
+            --text-primary: #202124;
+            --text-secondary: #5f6368;
+            --border-color: #dadce0;
+            --shadow-1: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+            --shadow-2: 0 1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --border-radius: 16px;
+            --border-radius-sm: 12px;
+            --border-radius-xs: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 20px;
-            color: #333;
+            padding: 0;
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding: 0;
         }
 
-        .back-btn {
-            background-color: #3498db;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .back-btn:hover {
-            background-color: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .calculator-container {
+        .container {
             max-width: 900px;
             margin: 0 auto;
-            background-color: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            padding-bottom: 100px; /* Для кнопки рассчитать */
         }
 
-        h2 {
-            color: #2c3e50;
-            margin-top: 0;
-        }
-
-        .section {
-            margin-bottom: 20px;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        .section-title {
-            background-color: #3498db;
-            color: white;
-            padding: 12px 15px;
-            cursor: pointer;
+        /* Header styles */
+        .app-header {
             display: flex;
+            align-items: center;
+            padding: 16px 24px;
+            background-color: var(--surface-color);
+            box-shadow: var(--shadow-1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            margin-bottom: 24px;
+            border-radius: var(--border-radius);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            width: 100%;
             justify-content: space-between;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .header-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Button styles */
+        .btn {
+            display: inline-flex;
             align-items: center;
-            font-weight: bold;
-            transition: background-color 0.3s;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: var(--border-radius-sm);
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.25px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+            text-decoration: none;
+            height: 48px;
+            white-space: nowrap;
         }
 
-        .section-title:hover {
-            background-color: #2980b9;
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 1px 2px 0 rgba(26, 115, 232, 0.3);
         }
 
-        .section-content {
-            display: none;
-            padding: 15px;
-            background-color: #f9f9f9;
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            box-shadow: 0 2px 6px 2px rgba(26, 115, 232, 0.2);
+            transform: translateY(-1px);
         }
 
-        .service-item {
-            margin-bottom: 12px;
-            padding: 10px;
-            background-color: white;
-            border-radius: 4px;
-            border-left: 4px solid #3498db;
+        .btn-outlined {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
         }
 
-        label {
+        .btn-outlined:hover {
+            background-color: rgba(26, 115, 232, 0.04);
+            border-color: var(--primary-dark);
+        }
+
+        .btn-text {
+            background-color: transparent;
+            color: var(--primary-color);
+            padding: 0 8px;
+            height: auto;
+        }
+
+        .btn-text:hover {
+            background-color: rgba(26, 115, 232, 0.04);
+        }
+
+        .btn-icon {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+
+        /* Card styles */
+        .card {
+            background-color: var(--surface-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-1);
+            margin-bottom: 24px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-2);
+        }
+
+        .card-header {
             display: flex;
             align-items: center;
-            margin-bottom: 5px;
+            padding: 16px 24px;
             cursor: pointer;
+            user-select: none;
         }
 
-        input[type="checkbox"] {
-            margin-right: 10px;
-            transform: scale(1.2);
+        .card-header:hover {
+            background-color: rgba(0, 0, 0, 0.02);
         }
 
-        input[type="number"] {
-            width: 100px;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-left: 10px;
+        .card-icon {
+            margin-right: 16px;
+            color: var(--primary-color);
+            font-size: 24px;
+            background-color: rgba(26, 115, 232, 0.08);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .calculate-btn {
-            background-color: #27ae60;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
+        .card-title {
+            flex: 1;
             font-size: 16px;
-            font-weight: bold;
-            transition: all 0.3s;
-            display: block;
-            margin: 25px auto 0;
+            font-weight: 500;
         }
 
-        .calculate-btn:hover {
-            background-color: #219653;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        .card-arrow {
+            color: var(--text-secondary);
+            transition: transform 0.3s;
+        }
+
+        .card-content {
+            padding: 0 24px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s, padding 0.3s;
+        }
+
+        .card.expanded .card-content {
+            padding: 0 24px 24px;
+            max-height: 1000px;
+        }
+
+        .card.expanded .card-arrow {
+            transform: rotate(180deg);
+        }
+
+        /* Form styles */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox-input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkbox-custom {
+            position: relative;
+            height: 18px;
+            width: 18px;
+            background-color: transparent;
+            border: 2px solid var(--text-secondary);
+            border-radius: 4px;
+            margin-right: 12px;
+            transition: var(--transition);
+        }
+
+        .checkbox-container:hover .checkbox-custom {
+            border-color: var(--primary-color);
+        }
+
+        .checkbox-input:checked ~ .checkbox-custom {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .checkbox-custom:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 5px;
+            top: 1px;
+            width: 4px;
+            height: 9px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .checkbox-input:checked ~ .checkbox-custom:after {
+            display: block;
+        }
+
+        .checkbox-label {
+            font-size: 14px;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            margin-left: 30px;
+        }
+
+        .input-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-right: 8px;
+        }
+
+        .input-field {
+            width: 100px;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-xs);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .input-field:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+
+        .input-field.limited {
+            color: var(--text-secondary);
+        }
+
+        /* Service item styles */
+        .service-item {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .service-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Banner styles */
+        .banner {
+            display: none;
+            align-items: center;
+            padding: 12px 16px;
+            background-color: #e8f0fe;
+            color: var(--primary-dark);
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+        .banner-icon {
+            margin-right: 12px;
+            color: var(--primary-color);
+        }
+
+        .banner-text {
+            flex: 1;
         }
 
         /* Modal styles */
@@ -142,216 +343,599 @@
         }
 
         .modal-content {
-            background-color: white;
-            padding: 25px;
-            border-radius: 8px;
+            background-color: var(--surface-color);
+            padding: 24px;
+            border-radius: var(--border-radius);
             width: 90%;
             max-width: 500px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--shadow-2);
         }
 
-        .modal-buttons {
+        .modal-title {
+            font-size: 20px;
+            font-weight: 500;
+            margin: 0 0 16px 0;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin: 0 0 24px 0;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        /* Snackbar styles */
+        .snackbar {
+            display: none;
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #323232;
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--border-radius-sm);
+            font-size: 14px;
+            box-shadow: var(--shadow-2);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* Main content styles */
+        .main-content {
+            padding: 24px 0;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 24px 0 16px;
+            color: var(--text-primary);
+        }
+
+        /* Calculate button container */
+        .calculate-container {
+            position: fixed;
+            bottom: 24px;
+            left: 0;
+            right: 0;
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
+            z-index: 99;
+            padding: 0 20px;
         }
 
-        .modal-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
+        .calculate-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 32px;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
             cursor: pointer;
-            font-weight: bold;
-        }
-
-        .confirm-btn {
-            background-color: #27ae60;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+            text-decoration: none;
+            height: 56px;
+            background-color: var(--primary-color);
             color: white;
+            box-shadow: 0 2px 10px rgba(26, 115, 232, 0.3);
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
-        .cancel-btn {
-            background-color: #e74c3c;
+        .calculate-btn:hover {
+            background-color: var(--primary-dark);
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .calculate-btn .material-icons {
+            margin-right: 12px;
+            font-size: 24px;
+        }
+
+        /* Back button styles */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: var(--border-radius-sm);
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.25px;
+            cursor: pointer;
+            transition: var(--transition);
+            height: 48px;
+            background-color: var(--primary-color);
             color: white;
+            box-shadow: 0 1px 2px 0 rgba(26, 115, 232, 0.3);
+            border: none;
         }
 
-        .error-message {
-            color: #e74c3c;
-            text-align: center;
-            margin-top: 15px;
-            font-weight: bold;
-            display: none;
+        .back-btn:hover {
+            background-color: var(--primary-dark);
+            box-shadow: 0 2px 6px 2px rgba(26, 115, 232, 0.2);
+            transform: translateY(-1px);
         }
 
-        @media (max-width: 768px) {
-            .calculator-container {
-                padding: 15px;
+        .back-btn .material-icons {
+            margin-right: 8px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .container {
+                padding: 16px;
+                padding-bottom: 100px;
             }
 
-            input[type="number"] {
+            .app-header {
+                padding: 12px 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .header-title {
+                font-size: 18px;
+            }
+
+            .card-header {
+                padding: 12px 16px;
+            }
+
+            .card-content {
+                padding: 0 16px;
+            }
+
+            .card.expanded .card-content {
+                padding: 0 16px 16px;
+            }
+
+            .input-field {
                 width: 80px;
+            }
+
+            .btn {
+                padding: 8px 16px;
+                height: 40px;
+            }
+
+            .calculate-btn {
+                padding: 12px 16px;
+                height: 48px;
+            }
+
+            .back-btn {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <a href="/" class="back-btn">← Вернуться на главную</a>
-    </div>
-
-    <div class="calculator-container">
-        <h2>Онлайн-калькулятор стоимости услуг</h2>
-        <p>Рассчитайте стоимость ремонта и укладки дорог онлайн</p>
-
-        <div class="section">
-            <div class="section-title" onclick="toggleSection(this)">
-                <span>🛣 Асфальтирование</span>
+    <div class="container">
+        <header class="app-header">
+            <div class="header-content">
+                <div>
+                    <div class="header-title">Калькулятор дорожных услуг</div>
+                    <div class="header-subtitle">Рассчитайте стоимость ремонта и укладки дорог</div>
+                </div>
+                <button class="back-btn" onclick="window.location.href='/'">
+                    <i class="material-icons">arrow_back</i>
+                    Назад
+                </button>
             </div>
-            <div class="section-content">
-                <div class="service-item">
-                    <label>
-                        <input type="checkbox" id="asphalt-laying">
-                        Укладка асфальта
-                    </label>
-                    Площадь (м²): <input type="number" id="asphalt-laying-area" oninput="autoActivate(this, 'asphalt-laying')">
-                </div>
-                <div class="service-item">
-                    <label>
-                        <input type="checkbox" id="two-layer-asphalt">
-                        Двухслойное асфальтирование
-                    </label>
-                    Площадь (м²): <input type="number" id="two-layer-asphalt-area" oninput="autoActivate(this, 'two-layer-asphalt')">
-                </div>
-                <div class="service-item">
-                    <label>
-                        <input type="checkbox" id="private-area-asphalt">
-                        Асфальтирование частных территорий
-                    </label>
-                    Площадь (м²): <input type="number" id="private-area-asphalt-area" oninput="autoActivate(this, 'private-area-asphalt')">
-                </div>
-                <div class="service-item">
-                    <label>
-                        <input type="checkbox" id="asphalt-patching">
-                        Ямочный ремонт асфальта
-                    </label>
-                    Площадь (м²): <input type="number" id="asphalt-patching-area" oninput="autoActivate(this, 'asphalt-patching')">
-                </div>
-            </div>
+        </header>
+
+        <div id="editBanner" class="banner">
+            <i class="material-icons banner-icon">edit</i>
+            <span class="banner-text">Редактирование заказа</span>
         </div>
 
-        <div class="section">
-            <div class="section-title" onclick="toggleSection(this)">
-                <span>🏡 Благоустройство</span>
+        <main class="main-content">
+            <div class="card">
+                <div class="card-header" onclick="toggleSection(this)">
+                    <div class="card-icon">
+                        <i class="material-icons">layers</i>
+                    </div>
+                    <div class="card-title">Асфальтирование</div>
+                    <i class="material-icons card-arrow">expand_more</i>
+                </div>
+                <div class="card-content">
+                    <div class="service-item">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="asphalt-laying" class="checkbox-input">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">Укладка асфальта</span>
+                        </label>
+                        <div class="input-container">
+                            <span class="input-label">Площадь (м²):</span>
+                            <input type="number" id="asphalt-laying-area" min="0" class="input-field"
+                                   oninput="validateInput(this, 'asphalt-laying')" onkeydown="allowNumberInput(event)">
+                        </div>
+                    </div>
+                    <div class="service-item">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="two-layer-asphalt" class="checkbox-input">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">Двухслойное асфальтирование</span>
+                        </label>
+                        <div class="input-container">
+                            <span class="input-label">Площадь (м²):</span>
+                            <input type="number" id="two-layer-asphalt-area" min="0" class="input-field"
+                                   oninput="validateInput(this, 'two-layer-asphalt')" onkeydown="allowNumberInput(event)">
+                        </div>
+                    </div>
+                    <div class="service-item">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="private-area-asphalt" class="checkbox-input">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">Асфальтирование частных территорий</span>
+                        </label>
+                        <div class="input-container">
+                            <span class="input-label">Площадь (м²):</span>
+                            <input type="number" id="private-area-asphalt-area" min="0" class="input-field"
+                                   oninput="validateInput(this, 'private-area-asphalt')" onkeydown="allowNumberInput(event)">
+                        </div>
+                    </div>
+                    <div class="service-item">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="asphalt-patching" class="checkbox-input">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">Ямочный ремонт асфальта</span>
+                        </label>
+                        <div class="input-container">
+                            <span class="input-label">Площадь (м²):</span>
+                            <input type="number" id="asphalt-patching-area" min="0" class="input-field"
+                                   oninput="validateInput(this, 'asphalt-patching')" onkeydown="allowNumberInput(event)">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="section-content">
-                <div class="service-item">
-                    <label>
-                        <input type="checkbox" id="road-border-install">
-                        Установка дорожного бордюра
-                    </label>
-                    Длина (м): <input type="number" id="road-border-install-length" oninput="autoActivate(this, 'road-border-install')">
-                </div>
-                <div class="service-item">
-                    <label>
-                        <input type="checkbox" id="pavement-border-install">
-                        Установка тротуарного бордюра
-                    </label>
-                    Длина (м): <input type="number" id="pavement-border-install-length" oninput="autoActivate(this, 'pavement-border-install')">
-                </div>
-                <div class="service-item">
-                    <label>
-                        <input type="checkbox" id="pavement-tile-laying">
-                        Укладка тротуарной плитки
-                    </label>
-                    Площадь (м²): <input type="number" id="pavement-tile-laying-area" oninput="autoActivate(this, 'pavement-tile-laying')">
-                </div>
-            </div>
-        </div>
 
-        <div class="section">
-            <div class="section-title" onclick="toggleSection(this)">
-                <span>🚧 Демонтажные работы</span>
-            </div>
-            <div class="section-content">
-                <div class="service-item">
-                    <label>
-                        <input type="checkbox" id="manual-asphalt-removal">
-                        Разработка асфальтобетонного покрытия вручную
-                    </label>
-                    Площадь (м²): <input type="number" id="manual-asphalt-removal-area" oninput="autoActivate(this, 'manual-asphalt-removal')">
+            <div class="card">
+                <div class="card-header" onclick="toggleSection(this)">
+                    <div class="card-icon">
+                        <i class="material-icons">home</i>
+                    </div>
+                    <div class="card-title">Благоустройство</div>
+                    <i class="material-icons card-arrow">expand_more</i>
                 </div>
-                <div class="service-item">
-                    <label>
-                        <input type="checkbox" id="asphalt-milling">
-                        Фрезерование асфальтобетонного покрытия
-                    </label>
-                    Площадь (м²): <input type="number" id="asphalt-milling-area" oninput="autoActivate(this, 'asphalt-milling')">
+                <div class="card-content">
+                    <div class="service-item">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="road-border-install" class="checkbox-input">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">Установка дорожного бордюра</span>
+                        </label>
+                        <div class="input-container">
+                            <span class="input-label">Длина (м):</span>
+                            <input type="number" id="road-border-install-length" min="0" class="input-field"
+                                   oninput="validateInput(this, 'road-border-install')" onkeydown="allowNumberInput(event)">
+                        </div>
+                    </div>
+                    <div class="service-item">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="pavement-border-install" class="checkbox-input">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">Установка тротуарного бордюра</span>
+                        </label>
+                        <div class="input-container">
+                            <span class="input-label">Длина (м):</span>
+                            <input type="number" id="pavement-border-install-length" min="0" class="input-field"
+                                   oninput="validateInput(this, 'pavement-border-install')" onkeydown="allowNumberInput(event)">
+                        </div>
+                    </div>
+                    <div class="service-item">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="pavement-tile-laying" class="checkbox-input">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">Укладка тротуарной плитки</span>
+                        </label>
+                        <div class="input-container">
+                            <span class="input-label">Площадь (м²):</span>
+                            <input type="number" id="pavement-tile-laying-area" min="0" class="input-field"
+                                   oninput="validateInput(this, 'pavement-tile-laying')" onkeydown="allowNumberInput(event)">
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="section">
-            <div class="section-title" onclick="toggleSection(this)">
-                <span>🎨 Дополнительные услуги</span>
+            <div class="card">
+                <div class="card-header" onclick="toggleSection(this)">
+                    <div class="card-icon">
+                        <i class="material-icons">construction</i>
+                    </div>
+                    <div class="card-title">Демонтажные работы</div>
+                    <i class="material-icons card-arrow">expand_more</i>
+                </div>
+                <div class="card-content">
+                    <div class="service-item">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="manual-asphalt-removal" class="checkbox-input" onchange="handleManualRemovalCheckbox(this)">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">Разработка асфальтобетонного покрытия вручную</span>
+                        </label>
+                        <div class="input-container">
+                            <span class="input-label">Площадь (м²):</span>
+                            <input type="number" id="manual-asphalt-removal-area" max="300" class="input-field limited"
+                                   placeholder="до 300 м²" oninput="validateManualRemovalInput(this)" onkeydown="allowNumberInput(event)">
+                        </div>
+                    </div>
+                    <div class="service-item">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="asphalt-milling" class="checkbox-input" onchange="handleMillingCheckbox(this)">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">Фрезерование асфальтобетонного покрытия</span>
+                        </label>
+                        <div class="input-container">
+                            <span class="input-label">Площадь (м²):</span>
+                            <input type="number" id="asphalt-milling-area" min="50" class="input-field limited"
+                                   placeholder="от 50 м²" oninput="validateMillingInput(this)" onkeydown="allowNumberInput(event)">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="section-content">
-                <div class="service-item">
-                    <label>
-                        <input type="checkbox" id="paint-marking">
-                        Нанесение разметки краской
-                    </label>
-                    Площадь (м²): <input type="number" id="paint-marking-area" oninput="autoActivate(this, 'paint-marking')">
-                </div>
-                <div class="service-item">
-                    <label>
-                        <input type="checkbox" id="road-sign-install">
-                        Установка дорожных знаков
-                    </label>
-                    Количество: <input type="number" id="road-sign-install-quantity" oninput="autoActivate(this, 'road-sign-install')">
-                </div>
-                <div class="service-item">
-                    <label>
-                        <input type="checkbox" id="debris-removal">
-                        Вывоз строительного мусора
-                    </label>
-                    Объем (м³): <input type="number" id="debris-removal-volume" oninput="autoActivate(this, 'debris-removal')">
-                </div>
-            </div>
-        </div>
 
-        <button class="calculate-btn" onclick="showConfirmation()">Рассчитать</button>
+            <div class="card">
+                <div class="card-header" onclick="toggleSection(this)">
+                    <div class="card-icon">
+                        <i class="material-icons">add_circle</i>
+                    </div>
+                    <div class="card-title">Дополнительные услуги</div>
+                    <i class="material-icons card-arrow">expand_more</i>
+                </div>
+                <div class="card-content">
+                    <div class="service-item">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="paint-marking" class="checkbox-input">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">Нанесение разметки краской</span>
+                        </label>
+                        <div class="input-container">
+                            <span class="input-label">Площадь (м²):</span>
+                            <input type="number" id="paint-marking-area" min="0" class="input-field"
+                                   oninput="validateInput(this, 'paint-marking')" onkeydown="allowNumberInput(event)">
+                        </div>
+                    </div>
+                    <div class="service-item">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="road-sign-install" class="checkbox-input">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">Установка дорожных знаков</span>
+                        </label>
+                        <div class="input-container">
+                            <span class="input-label">Количество:</span>
+                            <input type="number" id="road-sign-install-quantity" min="0" class="input-field"
+                                   oninput="validateInput(this, 'road-sign-install')" onkeydown="allowNumberInput(event)">
+                        </div>
+                    </div>
+                    <div class="service-item">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="debris-removal" class="checkbox-input">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">Вывоз строительного мусора на мусоровозе с контейнером 30 м³ (рейс)</span>
+                        </label>
+                        <div class="input-container">
+                            <span class="input-label">Количество:</span>
+                            <input type="number" id="debris-removal-volume" min="0" class="input-field"
+                                   oninput="validateInput(this, 'debris-removal')" onkeydown="allowNumberInput(event)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div class="calculate-container">
+            <button class="calculate-btn" onclick="showConfirmation()">
+                <i class="material-icons">calculate</i>
+                Рассчитать стоимость
+            </button>
+        </div>
 
         <div id="confirmationModal" class="modal">
             <div class="modal-content">
-                <h3>Подтверждение расчета</h3>
-                <p>Вы уверены, что все необходимые услуги выбраны и параметры указаны верно?</p>
-                <div class="modal-buttons">
-                    <button class="modal-btn confirm-btn" onclick="submitForm()">Да, рассчитать</button>
-                    <button class="modal-btn cancel-btn" onclick="hideConfirmation()">Нет, вернуться</button>
+                <h3 class="modal-title">Подтверждение расчета</h3>
+                <p class="modal-text">Вы уверены, что все необходимые услуги выбраны и параметры указаны верно?</p>
+                <div class="modal-actions">
+                    <button class="btn btn-text" onclick="hideConfirmation()">Отменить</button>
+                    <button class="btn btn-primary" onclick="submitForm()">Рассчитать</button>
                 </div>
             </div>
         </div>
 
-        <div id="errorMessage" class="error-message"></div>
+        <div id="snackbar" class="snackbar"></div>
     </div>
 
     <script>
-        function toggleSection(header) {
-            const content = header.nextElementSibling;
-            content.style.display = content.style.display === "block" ? "none" : "block";
-        }
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Инициализация специальных полей
+            const millingInput = document.getElementById('asphalt-milling-area');
+            const manualInput = document.getElementById('manual-asphalt-removal-area');
+            millingInput.classList.add('limited');
+            manualInput.classList.add('limited');
 
-        // Initialize all sections to be closed
-        document.querySelectorAll('.section-content').forEach(content => {
-            content.style.display = 'none';
+            try {
+                // Получаем данные текущего пользователя
+                const userResponse = await fetch('/api/current_user');
+                if (userResponse.ok) {
+                    const userData = await userResponse.json();
+                    const userId = userData.id_client;
+
+                    if (userId) {
+                        // Получаем сохраненные данные расчета для текущего пользователя
+                        const calcResponse = await fetch(`/api/get_calculation?user_id=${userId}`);
+                        if (calcResponse.ok) {
+                            const calcData = await calcResponse.json();
+                            if (calcData && calcData.services) {
+                                document.getElementById('editBanner').style.display = 'flex';
+                                fillFormWithData(calcData);
+                            }
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Ошибка при загрузке данных пользователя:', error);
+            }
         });
 
-        function autoActivate(inputElement, checkboxId) {
+        // Функция для заполнения формы данными из Redis
+        function fillFormWithData(data) {
+            const serviceToIdMap = {
+                "Укладка асфальта": { id: "asphalt-laying", input: "area" },
+                "Двухслойное асфальтирование": { id: "two-layer-asphalt", input: "area" },
+                "Асфальтирование частных территорий": { id: "private-area-asphalt", input: "area" },
+                "Ямочный ремонт асфальта": { id: "asphalt-patching", input: "area" },
+                "Установка дорожного бордюра": { id: "road-border-install", input: "length" },
+                "Установка тротуарного бордюра": { id: "pavement-border-install", input: "length" },
+                "Укладка тротуарной плитки": { id: "pavement-tile-laying", input: "area" },
+                "Разработка асфальтобетонного покрытия толщ. 5 см. ручная": { id: "manual-asphalt-removal", input: "area" },
+                "Фрезерование асфальтобетонного покрытия толщ. 5 см.": { id: "asphalt-milling", input: "area" },
+                "Нанесение разметки краской": { id: "paint-marking", input: "area" },
+                "Установка дорожных знаков": { id: "road-sign-install", input: "quantity" },
+                "Вывоз строительного мусора": { id: "debris-removal", input: "volume" }
+            };
+
+            data.services.forEach(service => {
+                const mapping = serviceToIdMap[service.service_name];
+                if (mapping) {
+                    const checkbox = document.getElementById(mapping.id);
+                    const input = document.getElementById(`${mapping.id}-${mapping.input}`);
+
+                    if (checkbox && input) {
+                        checkbox.checked = true;
+                        input.value = service.quantity;
+
+                        if (mapping.id === 'asphalt-milling') {
+                            validateMillingInput(input);
+                        } else if (mapping.id === 'manual-asphalt-removal') {
+                            validateManualRemovalInput(input);
+                        } else {
+                            validateInput(input, mapping.id);
+                        }
+                    }
+                }
+            });
+        }
+
+        function toggleSection(header) {
+            const card = header.parentElement;
+            card.classList.toggle('expanded');
+        }
+
+        function allowNumberInput(event) {
+            if ([46, 8, 9, 27, 13, 110, 190].includes(event.keyCode) ||
+                (event.keyCode === 65 && event.ctrlKey === true) ||
+                (event.keyCode === 67 && event.ctrlKey === true) ||
+                (event.keyCode === 86 && event.ctrlKey === true) ||
+                (event.keyCode === 88 && event.ctrlKey === true) ||
+                (event.keyCode >= 48 && event.keyCode <= 57) ||
+                (event.keyCode >= 96 && event.keyCode <= 105) ||
+                (event.keyCode >= 37 && event.keyCode <= 40)) {
+                return;
+            }
+            event.preventDefault();
+        }
+
+        // Валидация для всех полей
+        function validateInput(inputElement, checkboxId) {
             const checkbox = document.getElementById(checkboxId);
-            if (inputElement.value !== '') {
+            inputElement.value = inputElement.value.replace(/[^0-9]/g, ''); // Удаление нечисловых символов
+            let value = parseFloat(inputElement.value) || 0;
+
+            // Если значение больше 0, то чекбокс должен быть отмечен
+            if (value > 0) {
                 checkbox.checked = true;
             } else {
                 checkbox.checked = false;
+                inputElement.value = ''; // Если значения нет, очищаем поле
+            }
+
+            return value;
+        }
+
+        // Валидация для фрезерования
+        function validateMillingInput(inputElement) {
+            const checkbox = document.getElementById('asphalt-milling');
+            let value = parseFloat(inputElement.value);
+
+            if (isNaN(value)) {
+                inputElement.value = '';
+                checkbox.checked = false;
+                inputElement.classList.add('limited'); // серый цвет
+                return;
+            }
+
+            if (value < 50) {
+                inputElement.value = 50;
+            }
+
+            checkbox.checked = true;
+            inputElement.classList.remove('limited'); // чёрный цвет
+        }
+
+        function handleMillingCheckbox(checkbox) {
+            const inputElement = document.getElementById('asphalt-milling-area');
+            if (checkbox.checked) {
+                inputElement.classList.remove('limited');
+                if (!inputElement.value) inputElement.value = 50;
+            } else {
+                inputElement.value = '';
+                inputElement.classList.add('limited'); // серый
+            }
+        }
+
+        // Валидация для ручной разработки
+        function validateManualRemovalInput(inputElement) {
+            const checkbox = document.getElementById('manual-asphalt-removal');
+            let value = parseFloat(inputElement.value);
+
+            if (isNaN(value) || value <= 0) {
+                inputElement.value = '';
+                checkbox.checked = false;
+                inputElement.classList.add('limited'); // вернуть серый цвет
+                return;
+            }
+
+            if (value > 300) {
+                inputElement.value = 300;
+            }
+
+            checkbox.checked = true;
+            inputElement.classList.remove('limited'); // сделать чёрным
+        }
+
+        function handleManualRemovalCheckbox(checkbox) {
+            const inputElement = document.getElementById('manual-asphalt-removal-area');
+            if (checkbox.checked) {
+                inputElement.classList.remove('limited');
+                if (!inputElement.value) inputElement.value = 1;
+            } else {
+                inputElement.value = '';
+                inputElement.classList.add('limited'); // снова серый
             }
         }
 
@@ -363,13 +947,20 @@
             document.getElementById('confirmationModal').style.display = 'none';
         }
 
+        function showSnackbar(message, duration = 5000) {
+            const snackbar = document.getElementById('snackbar');
+            snackbar.textContent = message;
+            snackbar.style.display = 'flex';
+
+            setTimeout(() => {
+                snackbar.style.display = 'none';
+            }, duration);
+        }
+
         async function submitForm() {
             hideConfirmation();
-
-            // Prepare data for API request
             const services = [];
 
-            // Mapping between form elements and service names in DB
             const serviceMapping = {
                 "asphalt-laying": "Укладка асфальта",
                 "two-layer-asphalt": "Двухслойное асфальтирование",
@@ -405,16 +996,21 @@
                     inputValue = parseFloat(volumeInput.value);
                 }
 
-                if (inputValue > 0) {
+                if (inputValue > 0 || (elementId === 'manual-asphalt-removal' || elementId === 'asphalt-milling')) {
+                    let quantity = inputValue;
+                    if (elementId === 'asphalt-milling') {
+                        quantity = Math.max(inputValue, 50);
+                    }
+
                     services.push({
                         service_name: serviceName,
-                        quantity: inputValue
+                        quantity: quantity
                     });
                 }
             }
 
             if (services.length === 0) {
-                showError("Пожалуйста, выберите хотя бы одну услугу с ненулевым количеством");
+                showSnackbar("Пожалуйста, выберите хотя бы одну услугу");
                 return;
             }
 
@@ -437,28 +1033,13 @@
                 }
 
                 const data = await response.json();
-
-                // Save results to sessionStorage for the results page
                 sessionStorage.setItem('calculationResults', JSON.stringify(data));
-
-                // Redirect to results page
                 window.location.href = '/get_redis_data';
 
             } catch (error) {
                 console.error('Error:', error);
-                showError(error.message || 'Произошла ошибка при расчете стоимости. Пожалуйста, попробуйте снова.');
+                showSnackbar(error.message || 'Произошла ошибка при расчете стоимости. Пожалуйста, попробуйте снова.');
             }
-        }
-
-        function showError(message) {
-            const errorElement = document.getElementById('errorMessage');
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-
-            // Hide error after 5 seconds
-            setTimeout(() => {
-                errorElement.style.display = 'none';
-            }, 5000);
         }
     </script>
 </body>

@@ -6,109 +6,162 @@
     <title>Подтверждение заявки на поставку</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             line-height: 1.6;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 20px;
-            color: #333;
-            background-color: #f9fafb;
+            padding: 30px 20px;
+            color: #2c3e50;
+            background-color: #f4f7f9;
         }
+
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background: #fff;
+            padding: 20px 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
         }
+
         .home-btn {
-            display: inline-block;
-            background: #2196F3;
+            background: #3498db;
             color: white;
             padding: 10px 20px;
             border-radius: 6px;
             text-decoration: none;
             font-weight: 600;
+            transition: background 0.3s;
         }
+
+        .home-btn:hover {
+            background: #2980b9;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            color: #34495e;
+        }
+
         .confirmation-card {
             background: white;
             padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.07);
             margin-bottom: 30px;
         }
+
         .info-row {
             display: flex;
+            justify-content: space-between;
             margin-bottom: 15px;
             padding-bottom: 15px;
             border-bottom: 1px solid #eee;
         }
+
         .info-label {
             font-weight: 600;
-            min-width: 200px;
             color: #555;
         }
+
         .items-section {
-            margin: 20px 0;
+            margin: 30px 0;
         }
+
+        .items-section h2 {
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            color: #2c3e50;
+        }
+
         .item-card {
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
+            background: #ffffff;
+            padding: 18px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
         }
+
         .item-header {
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #2980b9;
         }
+
+        .item-card div {
+            margin-bottom: 4px;
+        }
+
         .total-section {
             text-align: center;
-            padding: 20px;
-            background: #f0f8ff;
-            border-radius: 10px;
+            padding: 25px;
+            background: #ecf6ff;
+            border-radius: 12px;
             margin-bottom: 30px;
+            border: 1px solid #d0e7f9;
         }
+
+        .total-section h3 {
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
+
         .total-amount {
-            font-size: 1.8em;
-            color: #2196F3;
-            font-weight: 600;
-            margin: 10px 0;
+            font-size: 2rem;
+            color: #3498db;
+            font-weight: 700;
         }
+
         .status {
             display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
+            padding: 6px 14px;
+            border-radius: 30px;
             font-weight: 600;
-            background-color: #FFF3CD;
+            background-color: #fff3cd;
             color: #856404;
+            font-size: 0.95rem;
         }
+
         .actions {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 20px;
         }
+
         .btn {
-            padding: 12px 24px;
-            border-radius: 6px;
+            padding: 12px 26px;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: 600;
-            transition: all 0.3s;
+            font-size: 1rem;
+            transition: background 0.3s;
         }
+
         .btn-primary {
-            background: #2196F3;
+            background: #3498db;
             color: white;
         }
+
+        .btn-primary:hover {
+            background: #2d80ba;
+        }
+
         .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
-            border: 1px solid #ddd;
+            background: #ecf0f1;
+            color: #2c3e50;
+            border: 1px solid #bdc3c7;
+        }
+
+        .btn-secondary:hover {
+            background: #dfe6e9;
         }
     </style>
 </head>
 <body>
+
     <div class="header">
         <a href="/super_user/create_supply" class="home-btn">Создать новую заявку</a>
         <h1>Заявка на поставку №{{ application_id }}</h1>
@@ -117,17 +170,15 @@
     <div class="confirmation-card">
         <div class="info-row">
             <div class="info-label">Дата заявки:</div>
-            <div class="info-value">{{ application_date.strftime('%d.%m.%Y') }}</div>
+            <div>{{ application_date.strftime('%d.%m.%Y') }}</div>
         </div>
         <div class="info-row">
             <div class="info-label">Статус:</div>
-            <div class="info-value">
-                <span class="status">Ожидает поставки</span>
-            </div>
+            <div><span class="status">Ожидает поставки</span></div>
         </div>
         <div class="info-row">
             <div class="info-label">Поставщик:</div>
-            <div class="info-value">
+            <div>
                 {% if provider %}
                     {{ provider.provider_name }}
                 {% else %}
@@ -158,8 +209,8 @@
         <div class="item-card">
             <div class="item-header">{{ equip.equipment_name }}</div>
             <div>Количество: {{ equip_app.applic_equipment_quantity }}</div>
-            <div>Амортизация: {{ equip.equipment_ammortiz }} ₽</div>
-            <div>Общая стоимость: {{ equip_app.applic_equipment_quantity * equip.equipment_ammortiz }} ₽</div>
+
+            <div>Общая стоимость: {{ "%.0f"|format(equip_app.applic_equipment_quantity * equip.equipment_buy_price) }} ₽</div>
         </div>
         {% endfor %}
     </div>
@@ -174,5 +225,6 @@
         <a href="/super_user/create_supply" class="btn btn-primary">Создать новую заявку</a>
         <a href="/profile" class="btn btn-secondary">Вернуться в кабинет</a>
     </div>
+
 </body>
 </html>
