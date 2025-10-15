@@ -113,11 +113,11 @@
 ---
 
 ## 📸 Скриншоты системы
-> * `<img width="1903" height="851" alt="image" src="https://github.com/user-attachments/assets/ef25254c-3652-448a-8943-6ad983b9ccfa" />` - Главная страница сайта
+> * <img width="1903" height="851" alt="image" src="https://github.com/user-attachments/assets/ef25254c-3652-448a-8943-6ad983b9ccfa" /> - Главная страница сайта
 
-> *   `<img width="1252" height="819" alt="image" src="https://github.com/user-attachments/assets/3cd735c7-7b25-4ece-908b-4b6e148ff86d" />` - Онлайн-калькулятор для клиента.
-> *   `<img width="1170" height="798" alt="image" src="https://github.com/user-attachments/assets/6a43b8c9-bdcc-4298-9cc0-9e49d998f50d" />` - Выбор объекта.
-> *   `<img width="1654" height="817" alt="image" src="https://github.com/user-attachments/assets/647ded4c-0eb9-4a0b-a78b-8d042103ee52" />` - Личный кабинет клиента.
+> *   <img width="1252" height="819" alt="image" src="https://github.com/user-attachments/assets/3cd735c7-7b25-4ece-908b-4b6e148ff86d" /> - Онлайн-калькулятор для клиента.
+> *   <img width="1170" height="798" alt="image" src="https://github.com/user-attachments/assets/6a43b8c9-bdcc-4298-9cc0-9e49d998f50d" /> - Выбор объекта.
+> *   <img width="1654" height="817" alt="image" src="https://github.com/user-attachments/assets/647ded4c-0eb9-4a0b-a78b-8d042103ee52" /> - Личный кабинет клиента.
 
 <details>
 <summary>Посмотреть скриншоты (нажмите чтобы развернуть)</summary>
