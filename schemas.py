@@ -219,6 +219,10 @@ class ProviderBase(BaseModel):
     provider_name: Optional[str] = None
     provider_debt_to_the_supplier: Optional[int] = None
     supplier_debt: Optional[int] = None
+    provider_contact_person: Optional[str] = None  #
+    provider_city: Optional[str] = None
+    provider_email: Optional[str] = None
+    provider_phone: Optional[str] = None
 
 class ProviderCreate(ProviderBase):
     pass
