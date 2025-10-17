@@ -14,12 +14,11 @@ services:
       - SECRET_KEY=${SECRET_KEY}
       - ALGORITHM=HS256
       - REDIS_HOST=redis
-      - REDIS_PORT=6379
     depends_on:
       - db
       - redis
     volumes:
-      - .:/app  # Монтируем текущую директорию
+      - .:/app
     restart: unless-stopped
 
   db:
@@ -30,14 +29,13 @@ services:
       - POSTGRES_PASSWORD=${DB_PASS}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./backup.sql:/docker-entrypoint-initdb.d/backup.sql  # Автовосстановление
+      - ./backup.sql:/docker-entrypoint-initdb.d/backup.sql
     ports:
       - "5432:5432"
     restart: unless-stopped
 
   redis:
     image: redis:7-alpine
-    command: redis-server --appendonly yes
     ports:
       - "6379:6379"
     volumes:

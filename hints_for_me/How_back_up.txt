@@ -1,0 +1,52 @@
+Попробуйте новую кроссплатформенную оболочку PowerShell (https://aka.ms/pscore6)                                                                                                                                                                PS C:\Windows\system32> Test-NetConnection -ComputerName localhost -Port 5432                                                                                                                                                                                                                                                                                           ComputerName     : localhost
+RemoteAddress    : ::1
+RemotePort       : 5432
+InterfaceAlias   : Loopback Pseudo-Interface 1
+SourceAddress    : ::1
+TcpTestSucceeded : True
+
+
+
+PS C:\Windows\system32> $BackupDir = "C:\temp\postgres_backup"
+>> New-Item -ItemType Directory -Path $BackupDir -Force
+
+
+    Каталог: C:\temp
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        18.10.2025      0:34                postgres_backup
+
+
+PS C:\Windows\system32> docker run --rm -it `
+>>   -v "${BackupDir}:/backup" `
+>>   -e PGPASSWORD= `
+>>   postgres:17 pg_dump `
+>>   -h 127.0.0.1 `
+>>   -U postgres `
+>>   -d LuzDiplom `
+>>   -f /backup/backup.sql
+pg_dump: error: connection to server at "127.0.0.1", port 5432 failed: Connection refused
+        Is the server running on that host and accepting TCP/IP connections?
+PS C:\Windows\system32> docker run --rm -it `
+>>   -v "C:\temp\postgres_backup:/backup" `
+>>   -e PGPASSWORD= `
+>>   postgres:17 pg_dump `
+>>   -h host.docker.internal `
+>>   -U postgres `
+>>   -d LuzDiplom `
+>>   -f /backup/backup.sql
+Password:
+PS C:\Windows\system32> Get-ChildItem C:\temp\postgres_backup
+
+
+    Каталог: C:\temp\postgres_backup
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----        18.10.2025      0:45          38794 backup.sql
+
+
+PS C:\Windows\system32>

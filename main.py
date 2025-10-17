@@ -40,6 +40,8 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 app = FastAPI()
 
+#######################################################################################################
+
 # Настройка CORS
 app.add_middleware(
     CORSMiddleware,
@@ -70,12 +72,17 @@ async def root(request: Request):
 
 ########################################################################################
 def get_redis() -> Redis:
-    return Redis(host="localhost", port=6379, db=0)
+    redis_host = os.getenv('REDIS_HOST', 'localhost')  # 'redis' в Docker, 'localhost' локально
+    return Redis(host=redis_host, port=6379, db=0, decode_responses=True)
+    #Было, но заменено для докера
+    #return Redis(host="localhost", port=6379, db=0)
 
 # Загрузка описаний и изображений из JSON
 def load_service_data() -> Dict[str, Any]:
     # Определяем путь к файлу относительно расположения main.py
-    json_path = PathLib("C:\\Users\\Sung Jin-Woo\\PycharmProjects\\DiplomLuz\\data_description.json")
+    #замена для докера
+    #json_path = PathLib("C:\\Users\\Sung Jin-Woo\\PycharmProjects\\DiplomLuz\\data_description.json")
+    json_path = os.path.join(os.path.dirname(__file__), "data_description.json")
 
     try:
         with open(json_path, "r", encoding="utf-8") as file:
